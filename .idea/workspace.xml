@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="55c4e991-e683-4f97-b021-b87248c21035" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/dist/bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/dist/bundle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/js/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/js/App.jsx" afterDir="false" />
     </list>
@@ -43,8 +42,8 @@
       <file leaf-file-name="App.jsx" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/frontend/js/App.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="152" column="14" selection-start-line="152" selection-start-column="14" selection-end-line="152" selection-end-column="18" />
+            <state relative-caret-position="415">
+              <caret line="158" column="27" selection-start-line="158" selection-start-column="27" selection-end-line="158" selection-end-column="27" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -750,12 +749,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1531324984599</updated>
-      <workItem from="1531324987973" duration="11403000" />
+      <workItem from="1531324987973" duration="12786000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11403000" />
+    <option name="totallyTimeSpent" value="12786000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -770,8 +769,8 @@
       <window_info anchor="right" id="Maven Projects" />
       <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32897604" />
-      <window_info anchor="bottom" id="Terminal" weight="0.32897604" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32897604" />
+      <window_info active="true" anchor="bottom" id="Terminal" visible="true" weight="0.32897604" />
       <window_info id="Capture Tool" />
       <window_info id="Designer" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
@@ -870,8 +869,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/js/App.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="152" column="14" selection-start-line="152" selection-start-column="14" selection-end-line="152" selection-end-column="18" />
+        <state relative-caret-position="415">
+          <caret line="158" column="27" selection-start-line="158" selection-start-column="27" selection-end-line="158" selection-end-column="27" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>

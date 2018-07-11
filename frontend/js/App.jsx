@@ -142,6 +142,7 @@ function getRows(array) {
         let tbody =[];
         let count = 2;
         e.forEach((i, index) => {
+
             if (i.slice(0,3) === "zfi")  {
                 title.push(<td key={i} rowSpan={2}></td>);
                 index++;
@@ -153,7 +154,7 @@ function getRows(array) {
             } else if (i.slice(0,3) === "981") {
                 tbody.push(<td key={array[inc][count]}></td>);
                 count += 3;
-            } else if (count <= index || index === 1) {
+            } else if ((count <= index || index === 1) && (i.slice(0,3) !== "983")) {
                 tbody.push(<td key={array[inc][count]}>{array[inc][count]}</td>);
                 count += 3;
             }
