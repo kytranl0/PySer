@@ -4,6 +4,7 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 from flask import Flask, render_template
+import flask
 
 CLIENT_SECRETS_FILE = "client_secret.json"
 SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
@@ -24,6 +25,17 @@ def index():
 @app.route('/hello')
 def hello():
     return get_hello()
+
+
+@app.route('/test')
+def test():
+    return get_test()
+
+
+def get_test():
+    if 'credentials' not in flask.session:
+        return flask.redirect('authorize')
+
 
 
 def get_hello():
