@@ -57,7 +57,7 @@ export default class App extends React.Component {
     }
 
     test() {
-        $.get(window.location.href + 'test', (data) => {
+        $.get(window.location.href + 'authorize', (data) => {
             console.log(data)
         })
     }
