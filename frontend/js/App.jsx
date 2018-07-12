@@ -5,7 +5,9 @@ import { getEvents } from "./gcal";
 import { Table } from "reactstrap";
 import { organizeData, getRows } from "./GCalData";
 
+require('../css/fullstack.css');
 var $ = require('jquery');
+
 
 
 class HeaderBody extends React.Component {
@@ -39,6 +41,7 @@ class Header extends React.Component {
         )
     }
 }
+
 export default class App extends React.Component {
     constructor(props) {
         super(props);
@@ -53,9 +56,15 @@ export default class App extends React.Component {
         })
     }
 
+    test() {
+        $.get(window.location.href + 'test', (data) => {
+            console.log(data)
+        })
+    }
     render() {
         return (
             <div>
+                <button onClick={this.test}>Test</button>
                 <Table size="sm" bordered>
                     <thead>
                     <tr>

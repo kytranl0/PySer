@@ -1,26 +1,11 @@
-.page-header {
-	min-height: 100%;
-	text-align: center;
-	background-image: url('../images/header.jpg');
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: cover;
-	margin-top: -15px;
+th {
+	background-color: lemonchiffon;
+	border: 1px solid lightskyblue;
+	padding: 0 50px 0 50px;
 }
-.header-contents {
-	top: 50%;
-	position:absolute;
-}
-.header-contents h1 {
-	font-size: 120px;
-	font-weight: 300;
-}
-.header-contents button {
-	font-size: 35px;
-	border-radius: 30px;
-	font-weight: 300;
+td {
+	background-color: aliceblue;
+	border: 1px solid #999;
+	empty-cells: hide;
 }
 
-.header-contents button:focus {
-	outline: None;
-}

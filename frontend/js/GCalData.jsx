@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 export function organizeData(arr) {
     let data = [];
     let sorted = [];
@@ -67,15 +68,15 @@ export function getRows(array) {
         e.forEach((i, index) => {
 
             if (i.slice(0,3) === "zfi")  {
-                title.push(<td key={i} rowSpan={2}></td>);
+                title.push(<td className="border-0 invisible" key={i} rowSpan={2}></td>);
                 index++;
-                title.push(<td key={array[inc][index]}></td>);
+                title.push(<td className="border-0 invisible" key={array[inc][index]}></td>);
             } else if (isNaN(parseInt(i, 10))) {
                 title.push(<td key={i} rowSpan={2}>{i}</td>);
                 index++;
                 title.push(<td key={array[inc][index]}>{array[inc][index]}</td>)
             } else if (i.slice(0,3) === "981") {
-                tbody.push(<td key={array[inc][count]}></td>);
+                tbody.push(<td className="border-0 invisible" key={array[inc][count]}></td>);
                 count += 3;
             } else if ((count <= index || index === 1) && (i.slice(0,3) !== "983")) {
                 tbody.push(<td key={array[inc][count]}>{array[inc][count]}</td>);
