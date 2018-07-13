@@ -5,8 +5,10 @@ import { getEvents } from "./gcal";
 import { Table } from "reactstrap";
 import { organizeData, getRows } from "./GCalData";
 
+
 require('../css/fullstack.css');
 var $ = require('jquery');
+
 
 
 
@@ -56,15 +58,31 @@ export default class App extends React.Component {
         })
     }
 
-    test() {
+    //google login
+    login() {
         $.get(window.location.href + 'authorize', (data) => {
-            console.log(data)
+            if (typeof data === 'object') {
+                console.log(data);
+            } else {
+                window.open(data)
+            }
+        })
+    }
+
+    getData() {
+        $.get(window.location.href + 'getData', (data) => {
+            if (typeof data !== 'object') {
+                window.open(data)
+            } else {
+                console.log(data)
+            }
         })
     }
     render() {
         return (
             <div>
-                <button onClick={this.test}>Test</button>
+                <button onClick={this.login}>Login</button>
+                <button onClick={this.getData}>you want sum data?</button>
                 <Table size="sm" bordered>
                     <thead>
                     <tr>
@@ -86,7 +104,6 @@ export default class App extends React.Component {
 
 
 // ========================================
-
 
 
 
