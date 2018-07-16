@@ -9,8 +9,9 @@ export default class Login extends React.Component{
             if (typeof data === 'object') {
                 console.log(data);
             } else {
-                window.open(data)
+                window.location.replace(data);
             }
+
         })
     }
 

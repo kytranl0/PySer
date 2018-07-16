@@ -4,6 +4,6 @@
 
 /node_modules
 
-.idea/*
+.idea
 
 /backend/__init__.py

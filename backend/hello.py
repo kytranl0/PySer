@@ -1,17 +1,19 @@
+from __future__ import print_function
 import os
 import requests
-import webbrowser
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
+import json
+import datetime
 from flask_cors import CORS
 from flask import Flask, redirect, session, request, jsonify, url_for, render_template
 
 
 CLIENT_SECRETS_FILE = "client_secret.json"
-SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
-API_SERVICE_NAME = 'drive'
-API_VERSION = 'v2'
+SCOPES = ['https://www.googleapis.com/auth/calendar']
+API_SERVICE_NAME = 'calendar'
+API_VERSION = 'v3'
 
 
 app = Flask(__name__, static_folder='../frontend/dist', template_folder='../frontend')
@@ -42,14 +44,21 @@ def test_api_request():
     drive = googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
 
-    files = drive.files().list().execute()
+    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+
+    events_result = drive.events().list(calendarId='primary', timeMin=now,
+                                          maxResults=10, singleEvents=True,
+                                          orderBy='startTime').execute()
+
+    events = events_result.get('items', {})
+    # files = drive.files().list().execute()
 
     # Save credentials back to session in case access token was refreshed.
     # ACTION ITEM: In a production app, you likely want to save these
     #              credentials in a persistent database instead.
     session['credentials'] = credentials_to_dict(credentials)
 
-    return jsonify(**files)
+    return jsonify(**events_result)
 
 
 @app.route('/authorize',  methods=['GET'])

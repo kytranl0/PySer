@@ -70,11 +70,7 @@ export default class Calendar extends React.Component {
 
     getData() {
         $.get('http://localhost:8080/getData', (data) => {
-            if (typeof data !== 'object') {
-                window.open(data)
-            } else {
                 console.log(data)
-            }
         })
     }
     render() {
