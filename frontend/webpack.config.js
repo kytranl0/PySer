@@ -1,14 +1,18 @@
 const webpack = require('webpack');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 let config = {
-    entry: __dirname + '/js/index.jsx',
+    entry: {
+        index: __dirname + '/index.jsx',
+        app: __dirname + '/app.jsx'
+    },
     output: {
         path: __dirname + '/dist',
-        filename: 'bundle.js',
+        filename: '[name].js',
     },
     resolve: {
-        extensions: [".js", ".jsx", ".css"]
+        extensions: [".js", ".jsx", ".css", "js/Calendar.jsx"],
     },
     module: {
         rules: [
@@ -32,6 +36,7 @@ let config = {
     },
     plugins: [
         new ExtractTextPlugin('styles.css'),
+        // new BundleAnalyzerPlugin()
     ]
 };
 

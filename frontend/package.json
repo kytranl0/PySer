@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.jsx",
   "scripts": {
     "build": "webpack -p --progress --config webpack.config.js",
     "dev-build": "webpack --progress -d --config webpack.config.js",
@@ -39,9 +39,12 @@
     "react": "^16.4.1",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.4.1",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
     "reactstrap": "^6.3.0",
     "style-loader": "^0.21.0",
     "superagent": "^3.8.3",
-    "webpack": "^3.0.0"
+    "webpack": "^3.0.0",
+    "webpack-bundle-analyzer": "^2.13.1"
   }
 }

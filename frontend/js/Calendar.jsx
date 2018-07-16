@@ -11,7 +11,6 @@ var $ = require('jquery');
 
 
 
-
 class HeaderBody extends React.Component {
     renderRow() {
         let arr = organizeData(Object.entries(this.props.data));
@@ -44,7 +43,7 @@ class Header extends React.Component {
     }
 }
 
-export default class App extends React.Component {
+export default class Calendar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -70,7 +69,7 @@ export default class App extends React.Component {
     }
 
     getData() {
-        $.get(window.location.href + 'getData', (data) => {
+        $.get('http://localhost:8080/getData', (data) => {
             if (typeof data !== 'object') {
                 window.open(data)
             } else {
@@ -81,7 +80,6 @@ export default class App extends React.Component {
     render() {
         return (
             <div>
-                <button onClick={this.login}>Login</button>
                 <button onClick={this.getData}>you want sum data?</button>
                 <Table size="sm" bordered>
                     <thead>

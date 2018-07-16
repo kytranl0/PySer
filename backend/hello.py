@@ -25,6 +25,11 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/calendar')
+def calendar():
+    return render_template('app.html')
+
+
 @app.route('/getData')
 def test_api_request():
     if 'credentials' not in session:
@@ -88,7 +93,7 @@ def oauth2callback():
     credentials = flow.credentials
     session['credentials'] = credentials_to_dict(credentials)
 
-    return redirect(url_for('index'))
+    return redirect(url_for('calendar'))
 
 
 @app.route('/revoke')
@@ -116,14 +121,6 @@ def clear_credentials():
     if 'credentials' in session:
         del session['credentials']
     return ('Credentials have been cleared.<br><br>')
-
-
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    return response
 
 
 def credentials_to_dict(credentials):
