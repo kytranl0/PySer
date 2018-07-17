@@ -51,11 +51,11 @@ export default class Calendar extends React.Component {
         }
     }
 
-    componentDidMount() {
-        getEvents((data) => {
-            this.setState({data});
-        })
-    }
+    // componentDidMount() {
+    //     getEvents((data) => {
+    //         this.setState({data});
+    //     })
+    // }
 
     //google login
     login() {
@@ -68,21 +68,18 @@ export default class Calendar extends React.Component {
         })
     }
 
-    getData() {
+    componentDidMount() {
         $.get('http://localhost:8080/getData', (data) => {
-                console.log(data)
-        })
+            console.log(data)
+        });
     }
+
     render() {
         return (
             <div>
-                <button onClick={this.getData}>you want sum data?</button>
                 <Table size="sm" bordered>
                     <thead>
                     <tr>
-                        <Header
-                            data={this.state.data}
-                        />
                     </tr>
                     </thead>
                     <tbody>

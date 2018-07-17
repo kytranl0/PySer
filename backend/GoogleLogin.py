@@ -1,11 +1,10 @@
-from __future__ import print_function
 import os
 import requests
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
-import json
 import datetime
+import getData
 from flask_cors import CORS
 from flask import Flask, redirect, session, request, jsonify, url_for, render_template
 
@@ -57,8 +56,9 @@ def test_api_request():
     # ACTION ITEM: In a production app, you likely want to save these
     #              credentials in a persistent database instead.
     session['credentials'] = credentials_to_dict(credentials)
+    t = getData.getData(events)
 
-    return jsonify(**events_result)
+    return jsonify(**t)
 
 
 @app.route('/authorize',  methods=['GET'])
