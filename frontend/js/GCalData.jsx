@@ -2,57 +2,26 @@ import React from 'react';
 
 
 export function organizeData(arr) {
+    console.log(arr);
+    let keys = Object.keys(arr);
     let data = [];
-    let sorted = [];
-    arr.forEach(function (e) {
-        let sort = [];
-        let j = Object.entries(e[1]);
-        j.forEach(function (x) {
-            sort.push({
-                name: x[0],
-                start: x[1][0],
-                end: x[1][1]
-            });
-        });
-        sorted.push(sort);
+    let testData = [];
+    let firstRow = 0;
+    let secondRow = 1;
+    let count = 0;
+    keys.map(function(e) {
+        count < arr[e].length ? count = arr[e].length : void 0;
     });
-    let rr = [];
-    sorted.forEach(function (e) {
-        let t = e.sort(function (a, b) {
-            return a.start.slice(0, 2) - b.start.slice(0, 2);
-        });
-        rr.push(t)
-    });
-    let maxRow = 0;
-    rr.forEach(function (e, index) {
-        if (index === 0) {
-            maxRow = e.length
-        } else if (index !== 0 && maxRow < e.length) {
-            maxRow = e.length
-        }
-    });
-    for (let i = 0; i < maxRow ; i++) {
-        let row = [];
-        rr.map(function (e) {
-            if (e[i] !== undefined) {
-                row.push(
-                    e[i].name,
-                    e[i].start,
-                    e[i].end
-                )
-            } else {
-                let randomString = RandomString();
-                let randomInt = RandomInt();
-
-                row.push(
-                    "zfi" + randomString,
-                    "983" + randomInt,
-                    "981" + randomInt
-                )
+    for (let i = 0; i < count/3; i++) {
+        keys.forEach(function (e) {
+                testData.push(<td rowSpan={2}>{arr[e][firstRow]}</td>);
+                testData.push(<td>{arr[e][secondRow]}</td>);
             }
-        });
-        data.push(row)
+        );
+        secondRow += 3;
+        firstRow += 3;
     }
+    console.log(testData);
     return data;
 }
 

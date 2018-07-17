@@ -13,8 +13,9 @@ var $ = require('jquery');
 
 class HeaderBody extends React.Component {
     renderRow() {
-        let arr = organizeData(Object.entries(this.props.data));
-        return getRows(arr);
+        // let arr = organizeData(Object.entries(this.props.data));
+        // return getRows(arr);
+        return [];
     }
 
     render() {
@@ -47,15 +48,9 @@ export default class Calendar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
+            title: [],
         }
     }
-
-    // componentDidMount() {
-    //     getEvents((data) => {
-    //         this.setState({data});
-    //     })
-    // }
 
     //google login
     login() {
@@ -68,9 +63,12 @@ export default class Calendar extends React.Component {
         })
     }
 
+    //google get data
     componentDidMount() {
-        $.get('http://localhost:8080/getData', (data) => {
-            console.log(data)
+        $.get('http://localhost:8080/getData').then(data => {
+            organizeData(data);
+            this.setState({title:data});
+
         });
     }
 
@@ -80,11 +78,14 @@ export default class Calendar extends React.Component {
                 <Table size="sm" bordered>
                     <thead>
                     <tr>
+                        <Header
+                            data={this.state.title}
+                        />
                     </tr>
                     </thead>
                     <tbody>
                     <HeaderBody
-                        data={this.state.data}
+                        data={this.state}
                     />
                     </tbody>
                 </Table>
