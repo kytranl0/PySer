@@ -46,7 +46,7 @@ def test_api_request():
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 
     events_result = drive.events().list(calendarId='primary', timeMin=now,
-                                          maxResults=10, singleEvents=True,
+                                          maxResults=20, singleEvents=True,
                                           orderBy='startTime').execute()
 
     events = events_result.get('items', {})

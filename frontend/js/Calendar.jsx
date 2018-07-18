@@ -1,35 +1,18 @@
 import React from "react";
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { getEvents } from "./gcal";
 import { Table } from "reactstrap";
-import { organizeData, getRows } from "./GCalData";
+import { organizeData } from "./GCalData";
 
 
 require('../css/fullstack.css');
 var $ = require('jquery');
 
 
-
-class HeaderBody extends React.Component {
-    renderRow() {
-        // let arr = organizeData(Object.entries(this.props.data));
-        // return getRows(arr);
-        return [];
-    }
-
-    render() {
-        return (
-            this.renderRow()
-        )
-    }
-}
-
 class Header extends React.Component {
     renderColumn() {
         let header = [];
-        let key = Object.keys(this.props.data);
-        key.forEach(function(e) {
+        this.props.data.forEach(function(e) {
             header.push(
                 <th key={e} colSpan={2} >{e}</th>
             )
@@ -49,6 +32,7 @@ export default class Calendar extends React.Component {
         super(props);
         this.state = {
             title: [],
+            events: []
         }
     }
 
@@ -66,8 +50,9 @@ export default class Calendar extends React.Component {
     //google get data
     componentDidMount() {
         $.get('http://localhost:8080/getData').then(data => {
-            organizeData(data);
-            this.setState({title:data});
+            console.log(data);
+            this.setState({events: organizeData(data)});
+            this.setState({title: Object.keys(data)});
 
         });
     }
@@ -84,9 +69,7 @@ export default class Calendar extends React.Component {
                     </tr>
                     </thead>
                     <tbody>
-                    <HeaderBody
-                        data={this.state}
-                    />
+                    {this.state.events}
                     </tbody>
                 </Table>
             </div>
