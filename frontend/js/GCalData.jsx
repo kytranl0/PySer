@@ -18,18 +18,46 @@ export function organizeData(arr) {
         keys.map(function (e) {
             if (arr[e][firstRow] && arr[e][miniRow] && arr[e][secondRow]) {
                 index += 1;
-                testData.push(<td key={index} rowSpan={2}>{arr[e][firstRow]}</td>);
+                testData.push(
+                    <td className="text-center table-primary" key={index} rowSpan={2}><h4 className="font-weight-light">{arr[e][firstRow]}</h4></td>
+                );
                 index+= 1;
-                testData.push(<td key={index}>{arr[e][miniRow]}</td>);
+                testData.push(
+                    <td className="text-center table-success" key={index}><h5 className="font-weight-light">Start</h5></td>
+                );
                 index+= 1;
-                row.push(<td key={index}>{arr[e][secondRow]}</td>)
+                testData.push(
+                    <td className="text-center table-success" key={index}><h5 className="font-weight-light">{arr[e][miniRow]}</h5></td>
+                );
+                index+= 1;
+                row.push(
+                    <td className="text-center table-warning" scope="row" key={index}><h5 className="font-weight-light">End</h5></td>
+                );
+                index+= 1;
+                row.push(
+                    <td className="text-center table-warning" scope="row" key={index}><h5 className="font-weight-light">{arr[e][secondRow]}</h5></td>
+                );
             } else {
                 index+= 1;
-                testData.push(<td key={index} rowSpan={2}></td>);
+                testData.push(
+                    <td key={index} rowSpan={2}></td>
+                );
                 index+= 1;
-                testData.push(<td key={index}></td>);
+                testData.push(
+                    <td key={index}></td>
+                );
                 index+= 1;
-                row.push(<td key={index}></td>)
+                testData.push(
+                    <td key={index}></td>
+                );
+                index+= 1;
+                row.push(
+                    <td key={index}></td>
+                );
+                index+= 1;
+                row.push(
+                    <td key={index}></td>
+                )
             }
             }
         );
