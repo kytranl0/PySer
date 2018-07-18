@@ -37,7 +37,6 @@
     "file-loader": "^1.1.11",
     "install": "^0.12.1",
     "jquery": "^3.3.1",
-    "material-design-icons": "^3.0.1",
     "npm": "^6.2.0",
     "react": "^16.4.1",
     "react-bootstrap": "^0.32.1",
@@ -48,6 +47,7 @@
     "style-loader": "^0.21.0",
     "superagent": "^3.8.3",
     "webpack": "^3.0.0",
-    "webpack-bundle-analyzer": "^2.13.1"
+    "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-material-design-icons": "^0.1.0"
   }
 }

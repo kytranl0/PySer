@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 let ExtractTextPlugin = require('extract-text-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 let config = {
     entry: {
@@ -36,7 +35,6 @@ let config = {
     },
     plugins: [
         new ExtractTextPlugin('styles.css'),
-        // new BundleAnalyzerPlugin()
     ]
 };
 
