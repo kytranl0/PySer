@@ -9,7 +9,16 @@ export default class Login extends React.Component{
                 window.location.replace(data);
         })
     }
-
+    revoke() {
+        $.get(window.location.href + 'revoke', (data) => {
+            console.log(data)
+        })
+    }
+    clear() {
+        $.get(window.location.href+ 'clear', (data) => {
+            console.log(data)
+        })
+    }
     render() {
         return (
 
@@ -20,6 +29,12 @@ export default class Login extends React.Component{
                 <p className="lead">Welcome to my web-application! Please click the button below me to sign in :D</p>
                 <button type="button" className="btn btn-outline-primary btn-lg btn-block" onClick={this.login}>
                 Google Login
+                </button>
+                <button type="button" className="btn btn-outline-primary btn-lg btn-block" onClick={this.revoke}>
+                Revoke Login
+                </button>
+                <button type="button" className="btn btn-outline-primary btn-lg btn-block" onClick={this.clear}>
+                    Clear Credential
                 </button>
             </div>
         </div>
