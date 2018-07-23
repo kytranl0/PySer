@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import requests
 import google.oauth2.credentials
@@ -10,7 +11,12 @@ from flask import Flask, redirect, session, request, jsonify, url_for, render_te
 
 
 CLIENT_SECRETS_FILE = "client_secret.json"
-SCOPES = ['https://www.googleapis.com/auth/calendar']
+SCOPES = ['https://www.googleapis.com/auth/userinfo.email',
+          'https://www.googleapis.com/auth/calendar',
+          'https://www.googleapis.com/auth/plus.me',
+          'https://www.googleapis.com/auth/calendar.readonly',
+          'https://www.googleapis.com/auth/userinfo.profile',
+          'https://www.googleapis.com/auth/drive.metadata.readonly']
 API_SERVICE_NAME = 'calendar'
 API_VERSION = 'v3'
 
@@ -63,7 +69,6 @@ def test_api_request():
 
 @app.route('/authorize',  methods=['GET'])
 def authorize():
-    # Create flow instance to manage the OAuth 2.0 Authorization Grant Flow steps.
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
         CLIENT_SECRETS_FILE, scopes=SCOPES)
 

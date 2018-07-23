@@ -59,7 +59,7 @@ export default class Calendar extends React.Component {
     }
 
 
-    //google get data
+    // google get data
     componentDidMount() {
         $.get('http://localhost:8080/getData').then(data => {
             console.log(data);
