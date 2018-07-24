@@ -58,6 +58,12 @@ export default class Calendar extends React.Component {
         }
     }
 
+    getCalendarId() {
+        $.get('http://localhost:8080/getCalendarId').then(data => {
+            console.log(data);
+        })
+    }
+
 
     // google get data
     componentDidMount() {
@@ -72,6 +78,7 @@ export default class Calendar extends React.Component {
     render() {
         return (
             <div className="container">
+                <button type="button" className="btn btn-outline-primary btn-lg" onClick={this.getCalendarId}>A Get button</button>
                 <table className="table">
                     <thead>
                     <tr>

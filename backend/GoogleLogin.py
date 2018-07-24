@@ -36,26 +36,37 @@ def calendar():
     return render_template('app.html')
 
 
-@app.route('/getData')
-def test_api_request():
+@app.route('/getCalendarId')
+def calendarid():
     if 'credentials' not in session:
         return redirect('authorize')
 
     # Load credentials from the session.
     credentials = google.oauth2.credentials.Credentials(
         **session['credentials'])
+    t = clientlib(credentials).events().patch(calendarId='pdpmalware@gmail.com',
+                                            eventId='3v2n68jk5kko15tl44lve8ed7o',
+                                            body={'summary': 'hello there'}).execute()
 
-    drive = googleapiclient.discovery.build(
-        API_SERVICE_NAME, API_VERSION, credentials=credentials)
+    getid = clientlib(credentials).calendarList().list(pageToken=None).execute()
+
+    return jsonify(**getid)
+
+
+@app.route('/getData')
+def test_api_request():
+    if 'credentials' not in session:
+        return redirect('authorize')
+    credentials = google.oauth2.credentials.Credentials(
+        **session['credentials'])
 
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 
-    events_result = drive.events().list(calendarId='primary', timeMin=now,
+    events_result = clientlib(credentials).events().list(calendarId='primary', timeMin=now,
                                           maxResults=20, singleEvents=True,
                                           orderBy='startTime').execute()
 
     events = events_result.get('items', {})
-    # files = drive.files().list().execute()
 
     # Save credentials back to session in case access token was refreshed.
     # ACTION ITEM: In a production app, you likely want to save these
@@ -134,6 +145,11 @@ def clear_credentials():
     if 'credentials' in session:
         del session['credentials']
     return ('Credentials have been cleared.<br><br>')
+
+
+def clientlib(credentials):
+    return googleapiclient.discovery.build(
+        API_SERVICE_NAME, API_VERSION, credentials=credentials)
 
 
 def credentials_to_dict(credentials):
