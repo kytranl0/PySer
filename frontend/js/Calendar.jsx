@@ -29,62 +29,70 @@ class GetDate extends React.Component {
 
 
 class Header extends React.Component {
-    renderColumn() {
-        let header = [];
-        this.props.data.forEach(function(e) {
-            let date = new Date(e).getDay();
-            console.log(date);
-            header.push(
-                <th className="table-danger" key={e} colSpan={3}><h1 className="text-center font-weight-bold">{e}</h1></th>
+    renderTitle() {
+        if (this.props.data.length !== 0 || this.props.data === undefined) {
+            return (
+                this.props.data.map(item =>
+                    <th className="table-info text-center" key={item} colSpan={3}>
+                        <button onClick={this.props.onClick}>{item}</button>
+                    </th>
+                )
             )
-
-        });
-        return header;
+        } else {
+            return [];
+        }
     }
 
     render() {
-        return (
-            this.renderColumn()
-        )
+       return (
+           this.renderTitle()
+       )
     }
 }
 
 export default class Calendar extends React.Component {
     constructor(props) {
         super(props);
+        this.handleChange = this.handleChange.bind(this);
         this.state = {
             title: [],
-            events: []
+            events: [],
+            test: []
         }
     }
-
     getCalendarId() {
         $.get('http://localhost:8080/getCalendarId').then(data => {
             console.log(data);
         })
     }
 
-
+    handleClick(i) {
+        this.setState({
+            test: new Date()
+        })
+    }
     // google get data
     componentDidMount() {
-        $.get('http://localhost:8080/getData').then(data => {
-            console.log(data);
-            this.setState({events: organizeData(data)});
-            this.setState({title: Object.keys(data)});
+        $.get('http://localhost:8080/getData').then(data => {this.handleChange(data)});
+    }
 
-        });
+    handleChange(data) {
+        this.setState({title: Object.keys(data)});
+        this.setState({events: organizeData(data)});
     }
 
     render() {
         return (
             <div className="container">
-                <button type="button" className="btn btn-outline-primary btn-lg" onClick={this.getCalendarId}>A Get button</button>
+                <button type="button" className="btn btn-outline-primary btn-lg" onClick={this.hello}>Google</button>
                 <table className="table">
                     <thead>
                     <tr>
                         <Header
+                            onClick={(i) => this.handleClick(i)}
                             data={this.state.title}
                         />
+
                     </tr>
                     <tr>
                         <GetDate
