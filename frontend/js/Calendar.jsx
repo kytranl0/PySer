@@ -10,7 +10,7 @@ var $ = require('jquery');
 
 class GetDate extends React.Component {
     renderDate() {
-        let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        let days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         let header = [];
         this.props.data.forEach(function(e) {
             let date = new Date(e).getDay();
@@ -30,18 +30,14 @@ class GetDate extends React.Component {
 
 class Header extends React.Component {
     renderTitle() {
-        if (this.props.data.length !== 0 || this.props.data === undefined) {
             return (
                 this.props.data.map(item =>
                     <th className="table-info text-center" key={item} colSpan={3}>
-                        <button onClick={this.props.onClick}>{item}</button>
+                        <button onClick={() => this.props.onClick(item)}>{item}</button>
                     </th>
                 )
             )
-        } else {
-            return [];
         }
-    }
 
     render() {
        return (
@@ -57,7 +53,9 @@ export default class Calendar extends React.Component {
         this.state = {
             title: [],
             events: [],
-            test: []
+            edit: false,
+            editParam: [],
+            test:[]
         }
     }
     getCalendarId() {
@@ -67,45 +65,88 @@ export default class Calendar extends React.Component {
     }
 
     handleClick(i) {
-        this.setState({
-            test: new Date()
-        })
-    }
-    // google get data
-    componentDidMount() {
-        $.get('http://localhost:8080/getData').then(data => {this.handleChange(data)});
+        console.log(i);
+        this.setState({edit: true});
+        this.setState({editParam: i});
     }
 
-    handleChange(data) {
+    handleChange(event) {
+        this.setState({editParam: event.target.value})
+    }
+
+    // google get data
+    componentDidMount() {
+        $.get('http://localhost:8080/getData').then(data => {this.handChange(data)});
+    }
+
+    handChange(data) {
+        console.log(data);
         this.setState({title: Object.keys(data)});
         this.setState({events: organizeData(data)});
     }
 
     render() {
-        return (
-            <div className="container">
-                <button type="button" className="btn btn-outline-primary btn-lg" onClick={this.hello}>Google</button>
-                <table className="table">
-                    <thead>
-                    <tr>
-                        <Header
-                            onClick={(i) => this.handleClick(i)}
-                            data={this.state.title}
-                        />
+        if (!this.state.edit) {
+            return (
+                <div className="container">
+                    <button type="button" className="btn btn-outline-primary btn-lg" onClick={this.hello}>Google
+                    </button>
+                    <table className="table">
+                        <thead>
+                        <tr>
+                            <Header
+                                onClick={i => this.handleClick(i)}
+                                data={this.state.title}
+                                edit={this.state.edit}
+                            />
 
-                    </tr>
-                    <tr>
-                        <GetDate
-                            data={this.state.title}
-                        />
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {this.state.events}
-                    </tbody>
-                </table>
+                        </tr>
+                        <tr>
+                            <GetDate
+                                data={this.state.title}
+                            />
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {this.state.events}
+                        </tbody>
+                    </table>
+                </div>
+            )
+        } else {
+            return (
+                <div className="container">
+                <button type="button" className="btn btn-outline-primary btn-lg" onClick={this.hello}>Google</button>
+                    <form>
+                        <label>
+                            Name:
+                            <input type="text" name="name" value={this.state.editParam} onChange={this.handleChange}/>
+                        </label>
+                        <input type="submit" value="Submit" />
+                    </form>
+            <table className="table">
+                <thead>
+                <tr>
+                    <Header
+                        onClick={i => this.handleClick(i)}
+                        data={this.state.title}
+                        edit={this.state.edit}
+                    />
+
+                </tr>
+                <tr>
+                    <GetDate
+                        data={this.state.title}
+                    />
+                </tr>
+                </thead>
+                <tbody>
+                {this.state.events}
+                </tbody>
+            </table>
             </div>
-        )
+            )
+        }
     }
 }
 
