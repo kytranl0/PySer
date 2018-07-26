@@ -55,7 +55,6 @@ export default class Calendar extends React.Component {
             events: [],
             edit: false,
             editParam: [],
-            test:[]
         }
     }
     getCalendarId() {
@@ -65,7 +64,6 @@ export default class Calendar extends React.Component {
     }
 
     handleClick(i) {
-        console.log(i);
         this.setState({edit: true});
         this.setState({editParam: i});
     }
@@ -74,22 +72,27 @@ export default class Calendar extends React.Component {
         this.setState({editParam: event.target.value})
     }
 
-    // google get data
-    componentDidMount() {
-        $.get('http://localhost:8080/getData').then(data => {this.handChange(data)});
+    handleSubmit(event) {
+        $.post('http://localhost:8080/sendData', {summary: event.target.value}).then(data => {
+            console.log(data)
+        })
     }
 
-    handChange(data) {
-        console.log(data);
-        this.setState({title: Object.keys(data)});
-        this.setState({events: organizeData(data)});
+    // google get data
+    componentDidMount() {
+        $.get('http://localhost:8080/getData').then(data => {
+            console.log(data);
+                this.setState({title: Object.keys(data)});
+                this.setState({events: organizeData(data)});
+            }
+        );
     }
 
     render() {
         if (!this.state.edit) {
             return (
                 <div className="container">
-                    <button type="button" className="btn btn-outline-primary btn-lg" onClick={this.hello}>Google
+                    <button type="button" className="btn btn-outline-primary btn-lg" onClick={() => this.componentDidMount()}>Google
                     </button>
                     <table className="table">
                         <thead>

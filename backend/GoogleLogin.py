@@ -77,6 +77,12 @@ def test_api_request():
     return jsonify(**t)
 
 
+@app.route('/sendData')
+def send():
+    if 'credentials' not in session:
+        return redirect('authorize')
+
+
 @app.route('/authorize',  methods=['GET'])
 def authorize():
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
