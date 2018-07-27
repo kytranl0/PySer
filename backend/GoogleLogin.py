@@ -77,10 +77,21 @@ def test_api_request():
     return jsonify(**t)
 
 
-@app.route('/sendData')
-def send():
+@app.route('/sendData',  methods=['POST'])
+def postdata():
     if 'credentials' not in session:
         return redirect('authorize')
+    t = request.form['summary']
+    # Load credentials from the session.
+    credentials = google.oauth2.credentials.Credentials(
+        **session['credentials'])
+    a = clientlib(credentials).events().patch(calendarId='pdpmalware@gmail.com',
+                                              eventId='3v2n68jk5kko15tl44lve8ed7o',
+                                              body={'summary': 'hello there'}).execute()
+
+    getid = clientlib(credentials).calendarList().list(pageToken=None).execute()
+
+    return jsonify(**t)
 
 
 @app.route('/authorize',  methods=['GET'])

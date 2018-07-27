@@ -49,18 +49,27 @@ class Header extends React.Component {
 export default class Calendar extends React.Component {
     constructor(props) {
         super(props);
-        this.handleChange = this.handleChange.bind(this);
         this.state = {
+            data: [],
             title: [],
             events: [],
             edit: false,
             editParam: [],
-        }
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
-    getCalendarId() {
-        $.get('http://localhost:8080/getCalendarId').then(data => {
-            console.log(data);
+
+    handleSubmit(event) {
+        event.preventDefault();
+        $.post('http://localhost:8080/sendData', {summary: this.state.editParam}).then(data => {
+            console.log(data)
         })
+    }
+
+
+    handleChange(event) {
+        this.setState({editParam: event.target.value})
     }
 
     handleClick(i) {
@@ -68,22 +77,15 @@ export default class Calendar extends React.Component {
         this.setState({editParam: i});
     }
 
-    handleChange(event) {
-        this.setState({editParam: event.target.value})
-    }
-
-    handleSubmit(event) {
-        $.post('http://localhost:8080/sendData', {summary: event.target.value}).then(data => {
-            console.log(data)
-        })
-    }
-
     // google get data
     componentDidMount() {
         $.get('http://localhost:8080/getData').then(data => {
-            console.log(data);
-                this.setState({title: Object.keys(data)});
-                this.setState({events: organizeData(data)});
+                if (data[0] === 'h') {
+                    window.open(data)
+                } else {
+                    this.setState({title: Object.keys(data)});
+                    this.setState({events: organizeData(data)});
+                }
             }
         );
     }
@@ -120,12 +122,12 @@ export default class Calendar extends React.Component {
             return (
                 <div className="container">
                 <button type="button" className="btn btn-outline-primary btn-lg" onClick={this.hello}>Google</button>
-                    <form>
+                    <form onSubmit={this.handleSubmit}>
                         <label>
-                            Name:
-                            <input type="text" name="name" value={this.state.editParam} onChange={this.handleChange}/>
+                            Date:
+                            <input type="text" value={this.state.editParam} onChange={this.handleChange} />
                         </label>
-                        <input type="submit" value="Submit" />
+                        <input  value="Submit" type="submit"/>
                     </form>
             <table className="table">
                 <thead>
@@ -155,6 +157,4 @@ export default class Calendar extends React.Component {
 
 
 // ========================================
-
-
 
