@@ -44,11 +44,11 @@ def calendarid():
     # Load credentials from the session.
     credentials = google.oauth2.credentials.Credentials(
         **session['credentials'])
-    t = clientlib(credentials).events().patch(calendarId='pdpmalware@gmail.com',
+    t = client_lib(credentials).events().patch(calendarId='pdpmalware@gmail.com',
                                             eventId='3v2n68jk5kko15tl44lve8ed7o',
                                             body={'summary': 'hello there'}).execute()
 
-    getid = clientlib(credentials).calendarList().list(pageToken=None).execute()
+    getid = client_lib(credentials).calendarList().list(pageToken=None).execute()
 
     return jsonify(**t)
 
@@ -57,23 +57,9 @@ def calendarid():
 def test_api_request():
     if 'credentials' not in session:
         return redirect('authorize')
-    credentials = google.oauth2.credentials.Credentials(
-        **session['credentials'])
-
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-
-    events_result = clientlib(credentials).events().list(calendarId='primary', timeMin=now,
-                                          maxResults=20, singleEvents=True,
-                                          orderBy='startTime').execute()
-
+    events_result = get_event()
     events = events_result.get('items', {})
-
-    # Save credentials back to session in case access token was refreshed.
-    # ACTION ITEM: In a production app, you likely want to save these
-    #              credentials in a persistent database instead.
-    session['credentials'] = credentials_to_dict(credentials)
     t = getData.getData(events)
-
     return jsonify(**t)
 
 
@@ -82,14 +68,16 @@ def postdata():
     if 'credentials' not in session:
         return redirect('authorize')
     t = request.form['summary']
+    eventId = get_event_id(t)
     # Load credentials from the session.
     credentials = google.oauth2.credentials.Credentials(
         **session['credentials'])
-    a = clientlib(credentials).events().patch(calendarId='pdpmalware@gmail.com',
+
+    a = client_lib(credentials).events().patch(calendarId='pdpmalware@gmail.com',
                                               eventId='3v2n68jk5kko15tl44lve8ed7o',
                                               body={'summary': 'hello there'}).execute()
 
-    getid = clientlib(credentials).calendarList().list(pageToken=None).execute()
+    getid = client_lib(credentials).calendarList().list(pageToken=None).execute()
 
     return jsonify(**t)
 
@@ -164,7 +152,7 @@ def clear_credentials():
     return ('Credentials have been cleared.<br><br>')
 
 
-def clientlib(credentials):
+def client_lib(credentials):
     return googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
 
@@ -176,6 +164,26 @@ def credentials_to_dict(credentials):
             'client_id': credentials.client_id,
             'client_secret': credentials.client_secret,
             'scopes': credentials.scopes}
+
+
+def get_event_id(t):
+    event = get_event()
+    items = event.get('items', {})
+    eventId = getData.getId(items, t)
+    return eventId
+
+
+def get_event():
+    credentials = google.oauth2.credentials.Credentials(
+        **session['credentials'])
+
+    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+
+    events_result = client_lib(credentials).events().list(calendarId='primary', timeMin=now,
+                                                         maxResults=20, singleEvents=True,
+                                                         orderBy='startTime').execute()
+    session['credentials'] = credentials_to_dict(credentials)
+    return events_result
 
 
 if __name__ == '__main__':
