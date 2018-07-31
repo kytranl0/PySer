@@ -29,7 +29,7 @@ class GetBody extends React.Component {
                         if (this.props.data[e][firstRow] && this.props.data[e][miniRow] && this.props.data[e][secondRow]) {
                             index += 1;
                             testData.push(
-                                <td className="text-center table-primary" onClick={() => this.props.onClick(this.props.data[e][3 + (i * 4)])} key={index} rowSpan={2}><h4
+                                <td className="text-center table-primary" onClick={() => this.props.onClick(this.props.data[e][3 + (i * 4)], 'summary', e)} key={index} rowSpan={2}><h4
                                     className="font-weight-light">{this.props.data[e][firstRow]}</h4></td>
                             );
                             index += 1;
@@ -39,7 +39,7 @@ class GetBody extends React.Component {
                             );
                             index += 1;
                             testData.push(
-                                <td className="text-center table-success" key={index}><h5
+                                <td className="text-center table-success" onClick={() => this.props.onClick(this.props.data[e][3 + (i * 4)], 'start', e)} key={index}><h5
                                     className="font-weight-light">{this.props.data[e][miniRow]}</h5></td>
                             );
                             index += 1;
@@ -49,7 +49,7 @@ class GetBody extends React.Component {
                             );
                             index += 1;
                             row.push(
-                                <td className="text-center table-warning" scope="row" key={index}><h5
+                                <td className="text-center table-warning" onClick={() => this.props.onClick(this.props.data[e][3 + (i * 4)], 'end', e)} key={index}><h5
                                     className="font-weight-light">{this.props.data[e][secondRow]}</h5></td>
                             );
                         } else {
@@ -139,11 +139,13 @@ export default class Calendar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            edit: false,
+            date: [],
             title: [],
             events: [],
-            edit: false,
             editParam: [],
             eventId: [],
+            type: []
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -151,9 +153,23 @@ export default class Calendar extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        $.post('http://localhost:8080/sendData', {summary: this.state.editParam, eventId: this.state.eventId}).then(data => {
-            location.reload()
-        })
+        if (!isNaN(this.state.editParam[0])) {
+            $.post('http://localhost:8080/sendData', {
+                input: this.state.date + 'T' + this.state.editParam + ':00-04:00',
+                operation: this.state.type,
+                eventId: this.state.eventId
+            }).then(data => {
+                location.reload()
+            })
+        } else {
+            $.post('http://localhost:8080/sendData', {
+                input: this.state.editParam,
+                operation: this.state.type,
+                eventId: this.state.eventId
+            }).then(data => {
+                location.reload()
+            })
+        }
     }
 
 
@@ -161,9 +177,11 @@ export default class Calendar extends React.Component {
         this.setState({editParam: event.target.value})
     }
 
-    handleClick(i) {
+    handleClick(i, d, j) {
+        this.setState({date: j});
         this.setState({edit: true});
-        this.setState({eventId: i})
+        this.setState({eventId: i});
+        this.setState({type: d});
     }
 
     // google get data
@@ -183,7 +201,7 @@ export default class Calendar extends React.Component {
         if (!this.state.edit) {
             return (
                 <div className="container">
-                    <button type="button" className="btn btn-outline-primary btn-lg" onClick={() => this.componentDidMount()}>Google
+                    <button type="button" className="btn btn-outline-primary btn-lg">Google
                     </button>
                     <table className="table">
                         <thead>
@@ -202,7 +220,7 @@ export default class Calendar extends React.Component {
                         </thead>
                         <tbody>
                         <GetBody
-                            onClick={i => this.handleClick(i)}
+                            onClick={(i, d, j) => this.handleClick(i, d, j)}
                             data={this.state.events}
                         />
                         </tbody>
@@ -212,10 +230,11 @@ export default class Calendar extends React.Component {
         } else {
             return (
                 <div className="container">
-                <button type="button" className="btn btn-outline-primary btn-lg" onClick={() => this.componentDidMount()}>Google</button>
+                <button type="button" className="btn btn-outline-primary btn-lg">Google</button>
                     <form onSubmit={this.handleSubmit}>
                         <label>
-                            <input type="text" onChange={this.handleChange} />
+                            {this.state.type} :
+                            <input type="text" value={this.state.editParam} onChange={this.handleChange} />
                         </label>
                         <input  value="Submit" type="submit"/>
                     </form>
@@ -236,7 +255,7 @@ export default class Calendar extends React.Component {
                 </thead>
                 <tbody>
                 <GetBody
-                    onClick={i => this.handleClick(i)}
+                    onClick={(i, d, j) => this.handleClick(i, d, j)}
                     data={this.state.events}
                 />
                 </tbody>

@@ -36,45 +36,6 @@ def calendar():
     return render_template('app.html')
 
 
-@app.route('/getCalendarId')
-def calendarid():
-    if 'credentials' not in session:
-        return redirect('authorize')
-
-    # Load credentials from the session.
-    credentials = google.oauth2.credentials.Credentials(
-        **session['credentials'])
-    t = client_lib(credentials).events().patch(calendarId='pdpmalware@gmail.com',
-                                            eventId='3v2n68jk5kko15tl44lve8ed7o',
-                                            body={'summary': 'hello there'}).execute()
-
-    getid = client_lib(credentials).calendarList().list(pageToken=None).execute()
-
-    return jsonify(**t)
-
-
-@app.route('/getData')
-def test_api_request():
-    if 'credentials' not in session:
-        return redirect('authorize')
-    events_result = get_event()
-    events = events_result.get('items', {})
-    t = getData.getData(events)
-    return jsonify(**t)
-
-
-@app.route('/sendData',  methods=['POST'])
-def postdata():
-    if 'credentials' not in session:
-        return redirect('authorize')
-    data = request.form['summary']
-    eventId = request.form['eventId']
-    # Load credentials from the session.
-    o = patch_event(data, eventId)
-
-    return jsonify(**o)
-
-
 @app.route('/authorize',  methods=['GET'])
 def authorize():
     flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
@@ -145,6 +106,27 @@ def clear_credentials():
     return ('Credentials have been cleared.<br><br>')
 
 
+@app.route('/getData')
+def test_api_request():
+    if 'credentials' not in session:
+        return redirect('authorize')
+    events_result = get_event()
+    events = events_result.get('items', {})
+    t = getData.getData(events)
+    return jsonify(**t)
+
+
+@app.route('/sendData',  methods=['POST'])
+def postdata():
+    if 'credentials' not in session:
+        return redirect('authorize')
+    data = request.form['input']
+    eventid = request.form['eventId']
+    operation = request.form['operation']
+    o = patch_event(data, eventid, operation)
+    return jsonify(**o)
+
+
 def credentials_to_dict(credentials):
     return {'token': credentials.token,
             'refresh_token': credentials.refresh_token,
@@ -154,13 +136,23 @@ def credentials_to_dict(credentials):
             'scopes': credentials.scopes}
 
 
-def patch_event(data, id):
-    credentials = google.oauth2.credentials.Credentials(
-        **session['credentials'])
+def patch_event(data, eventid, operation):
+    if operation == 'summary':
+        credentials = google.oauth2.credentials.Credentials(
+            **session['credentials'])
 
-    a = client_lib(credentials).events().patch(calendarId='pdpmalware@gmail.com',
-                                               eventId=id,
-                                               body={'summary': data}).execute()
+        a = client_lib(credentials).events().patch(calendarId='pdpmalware@gmail.com',
+                                                   eventId=eventid,
+                                                   body={operation: data}).execute()
+    else:
+        credentials = google.oauth2.credentials.Credentials(
+            **session['credentials'])
+
+        a = client_lib(credentials).events().patch(calendarId='pdpmalware@gmail.com',
+                                                   eventId=eventid,
+                                                   body={operation: {
+                                                       "dateTime": data
+                                                   }}).execute()
     return a
 
 
