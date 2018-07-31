@@ -11,8 +11,3 @@ def getData(data):
             items[startStr[0]] = item['summary'], start, end, item['id']
     return items
 
-
-def getId(data, title):
-    for item in data:
-        return []
-    return title

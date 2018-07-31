@@ -67,19 +67,12 @@ def test_api_request():
 def postdata():
     if 'credentials' not in session:
         return redirect('authorize')
-    t = request.form['summary']
-    eventId = get_event_id(t)
+    data = request.form['summary']
+    eventId = request.form['eventId']
     # Load credentials from the session.
-    credentials = google.oauth2.credentials.Credentials(
-        **session['credentials'])
+    o = patch_event(data, eventId)
 
-    a = client_lib(credentials).events().patch(calendarId='pdpmalware@gmail.com',
-                                              eventId='3v2n68jk5kko15tl44lve8ed7o',
-                                              body={'summary': 'hello there'}).execute()
-
-    getid = client_lib(credentials).calendarList().list(pageToken=None).execute()
-
-    return jsonify(**t)
+    return jsonify(**o)
 
 
 @app.route('/authorize',  methods=['GET'])
@@ -152,11 +145,6 @@ def clear_credentials():
     return ('Credentials have been cleared.<br><br>')
 
 
-def client_lib(credentials):
-    return googleapiclient.discovery.build(
-        API_SERVICE_NAME, API_VERSION, credentials=credentials)
-
-
 def credentials_to_dict(credentials):
     return {'token': credentials.token,
             'refresh_token': credentials.refresh_token,
@@ -166,11 +154,14 @@ def credentials_to_dict(credentials):
             'scopes': credentials.scopes}
 
 
-def get_event_id(t):
-    event = get_event()
-    items = event.get('items', {})
-    eventId = getData.getId(items, t)
-    return eventId
+def patch_event(data, id):
+    credentials = google.oauth2.credentials.Credentials(
+        **session['credentials'])
+
+    a = client_lib(credentials).events().patch(calendarId='pdpmalware@gmail.com',
+                                               eventId=id,
+                                               body={'summary': data}).execute()
+    return a
 
 
 def get_event():
@@ -184,6 +175,11 @@ def get_event():
                                                          orderBy='startTime').execute()
     session['credentials'] = credentials_to_dict(credentials)
     return events_result
+
+
+def client_lib(credentials):
+    return googleapiclient.discovery.build(
+        API_SERVICE_NAME, API_VERSION, credentials=credentials)
 
 
 if __name__ == '__main__':

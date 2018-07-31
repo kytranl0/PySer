@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {organizeData, RandomInt} from "./GCalData";
+import {RandomInt} from "./GCalData";
 
 
 require('../css/fullstack.css');
@@ -29,7 +29,7 @@ class GetBody extends React.Component {
                         if (this.props.data[e][firstRow] && this.props.data[e][miniRow] && this.props.data[e][secondRow]) {
                             index += 1;
                             testData.push(
-                                <td className="text-center table-primary" key={index} rowSpan={2}><h4
+                                <td className="text-center table-primary" onClick={() => this.props.onClick(this.props.data[e][3 + (i * 4)])} key={index} rowSpan={2}><h4
                                     className="font-weight-light">{this.props.data[e][firstRow]}</h4></td>
                             );
                             index += 1;
@@ -139,11 +139,11 @@ export default class Calendar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
             title: [],
             events: [],
             edit: false,
             editParam: [],
+            eventId: [],
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -151,8 +151,8 @@ export default class Calendar extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        $.post('http://localhost:8080/sendData', {summary: this.state.editParam}).then(data => {
-            console.log(data)
+        $.post('http://localhost:8080/sendData', {summary: this.state.editParam, eventId: this.state.eventId}).then(data => {
+            location.reload()
         })
     }
 
@@ -163,7 +163,7 @@ export default class Calendar extends React.Component {
 
     handleClick(i) {
         this.setState({edit: true});
-        this.setState({editParam: i});
+        this.setState({eventId: i})
     }
 
     // google get data
@@ -189,7 +189,6 @@ export default class Calendar extends React.Component {
                         <thead>
                         <tr>
                             <Header
-                                onClick={i => this.handleClick(i)}
                                 data={this.state.title}
                                 edit={this.state.edit}
                             />
@@ -202,9 +201,10 @@ export default class Calendar extends React.Component {
                         </tr>
                         </thead>
                         <tbody>
-                            <GetBody
+                        <GetBody
+                            onClick={i => this.handleClick(i)}
                             data={this.state.events}
-                            />
+                        />
                         </tbody>
                     </table>
                 </div>
@@ -212,11 +212,10 @@ export default class Calendar extends React.Component {
         } else {
             return (
                 <div className="container">
-                <button type="button" className="btn btn-outline-primary btn-lg" onClick={this.hello}>Google</button>
+                <button type="button" className="btn btn-outline-primary btn-lg" onClick={() => this.componentDidMount()}>Google</button>
                     <form onSubmit={this.handleSubmit}>
                         <label>
-                            Date:
-                            <input type="text" value={this.state.editParam} onChange={this.handleChange} />
+                            <input type="text" onChange={this.handleChange} />
                         </label>
                         <input  value="Submit" type="submit"/>
                     </form>
@@ -224,7 +223,6 @@ export default class Calendar extends React.Component {
                 <thead>
                 <tr>
                     <Header
-                        onClick={i => this.handleClick(i)}
                         data={this.state.title}
                         edit={this.state.edit}
                     />
@@ -238,6 +236,7 @@ export default class Calendar extends React.Component {
                 </thead>
                 <tbody>
                 <GetBody
+                    onClick={i => this.handleClick(i)}
                     data={this.state.events}
                 />
                 </tbody>
