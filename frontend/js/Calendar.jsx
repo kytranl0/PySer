@@ -149,10 +149,12 @@ export default class Calendar extends React.Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleDate = this.handleDate.bind(this);
     }
 
     handleSubmit(event) {
         event.preventDefault();
+        console.log('hi')
         if (!isNaN(this.state.editParam[0])) {
             $.post('http://localhost:8080/sendData', {
                 input: this.state.date + 'T' + this.state.editParam + ':00-04:00',
@@ -171,10 +173,12 @@ export default class Calendar extends React.Component {
             })
         }
     }
-
-
     handleChange(event) {
         this.setState({editParam: event.target.value})
+    }
+
+    handleDate(event) {
+        this.setState({date: event.target.value})
     }
 
     handleClick(i, d, j) {
@@ -210,7 +214,6 @@ export default class Calendar extends React.Component {
                                 data={this.state.title}
                                 edit={this.state.edit}
                             />
-
                         </tr>
                         <tr>
                             <GetDate
@@ -236,6 +239,7 @@ export default class Calendar extends React.Component {
                             {this.state.type} :
                             <input type="text" value={this.state.editParam} onChange={this.handleChange} />
                         </label>
+                            <input type="text" value={this.state.date} onChange={this.handleDate}/>
                         <input  value="Submit" type="submit"/>
                     </form>
             <table className="table">

@@ -31,6 +31,11 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/<path:path>')
+def catch_all(path):
+    return path
+
+
 @app.route('/calendar')
 def calendar():
     return render_template('app.html')
