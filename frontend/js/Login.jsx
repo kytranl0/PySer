@@ -28,19 +28,55 @@ const BasicExample = () => (
 );
 
 class GenerateSquare extends React.Component {
-    square() {
-        var m = this.props.ARow;
-        if (m < this.props.ACol) {
-            m = this.props.ACol
+    squareA() {
+            var row = [];
+            var square = [];
+            for (let i = 0; i < this.props.ACol; i++) {
+                row.push(
+                    <input type="text" size="3" name="row"/>
+                )
+            }
+            for (let i = 0; i < this.props.ARow; i++) {
+                square.push(
+                    <div>
+                        <label>
+                            {row}
+                        </label>
+                    </div>
+                )
+            }
+        return square
+    }
+    squareB() {
+        var col = [];
+        var square = [];
+        for (let i = 0; i < this.props.BCol; i++) {
+            col.push(
+                <input type="text" size="3" name="row"/>
+            )
         }
-        for (let i = 0; i < m; i++) {
-
+        for (let i = 0; i < this.props.BRow; i++) {
+            square.push(
+                <div>
+                    <label>
+                        {col}
+                    </label>
+                </div>
+            )
         }
-        return [i];
+        return square
     }
     render() {
         return (
-            this.square()
+            <div>
+            <form onSubmit={() => this.props.onClick()}>
+                <h1>A</h1>
+                {this.squareA()}
+                <h1>B</h1>
+                {this.squareB()}
+                <input type="submit" value="Calculate"/>
+            </form>
+            </div>
         )
     }
 }
@@ -79,6 +115,10 @@ class Matrix extends React.Component {
         }
     }
 
+    handleClick() {
+
+    }
+
     render() {
         if (!this.state.edit) {
             return (
@@ -103,6 +143,7 @@ class Matrix extends React.Component {
                     ACol = {this.state.xCol}
                     BRow = {this.state.yRow}
                     BCol = {this.state.yCol}
+                    onClick = {() => this.handleClick()}
                 />
             )
         }
