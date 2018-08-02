@@ -33,7 +33,10 @@ def index():
 
 @app.route('/<path:path>')
 def catch_all(path):
-    return path
+    if path == 'matrix':
+        return render_template('index.html')
+    else:
+        return path
 
 
 @app.route('/calendar')
@@ -132,6 +135,20 @@ def postdata():
     return jsonify(**o)
 
 
+@app.route('/matrixCal',  methods=['GET'])
+def calculate():
+    k = [[1, 2],
+         [4, 2]]
+    t = [[2, 4],
+         [8, 3]]
+    u = [[0 for x in range(len(k[1]))] for y in range(len(t))]
+    for i in range(0, len(k)):
+        for j in range(0, len(t[1])):
+            for o in range(0, len(t)):
+                u[i][j] += (k[i][o] * t[o][j])
+    return '.'
+
+
 def credentials_to_dict(credentials):
     return {'token': credentials.token,
             'refresh_token': credentials.refresh_token,
@@ -177,6 +194,9 @@ def get_event():
 def client_lib(credentials):
     return googleapiclient.discovery.build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
+
+
+
 
 
 if __name__ == '__main__':

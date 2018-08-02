@@ -27,15 +27,85 @@ const BasicExample = () => (
     </Router>
 );
 
-class Matrix extends React.Component {
+class GenerateSquare extends React.Component {
+    square() {
+        var m = this.props.ARow;
+        if (m < this.props.ACol) {
+            m = this.props.ACol
+        }
+        for (let i = 0; i < m; i++) {
+
+        }
+        return [i];
+    }
     render() {
         return (
-        <table>
-            <tr>
-                <th>Hi</th>
-            </tr>
-        </table>
+            this.square()
         )
+    }
+}
+
+class Matrix extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            numbers: [],
+            xRow: [],
+            xCol: [],
+            yRow: [],
+            yCol: [],
+            edit: false
+        };
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(event) {
+        event.preventDefault();
+        this.setState({
+            [event.target.name]: event.target.value
+        })
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        if (!this.state.edit) {
+            this.setState({edit: true})
+        } else {
+            $.get('http://localhost:8080/matrixCal', (data) => {
+                    console.log(data)
+                }
+            )
+        }
+    }
+
+    render() {
+        if (!this.state.edit) {
+            return (
+                <form onSubmit={this.handleSubmit}>
+                    <label>
+                        A :
+                        <input type="text" name="xRow" size="4" onChange={this.handleChange}/>
+                        <input type="text" name="xCol" size="4" onChange={this.handleChange}/>
+                    </label>
+                    <label>
+                        B :
+                        <input type="text" name="yRow" size="4" onChange={this.handleChange}/>
+                        <input type="text" name="yCol" size="4" onChange={this.handleChange}/>
+                    </label>
+                    <input value="Generate" name="generate" type="submit"/>
+                </form>
+            )
+        } else {
+            return (
+                <GenerateSquare
+                    ARow = {this.state.xRow}
+                    ACol = {this.state.xCol}
+                    BRow = {this.state.yRow}
+                    BCol = {this.state.yCol}
+                />
+            )
+        }
     }
 }
 
