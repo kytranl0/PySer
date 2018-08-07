@@ -1,5 +1,29 @@
 import React from "react";
 var $ = require('jquery');
+class GenerateAnswer extends React.Component {
+    getHeader() {
+        let row = [];
+        this.props.data.forEach((e) => {
+            let t = [];
+            e.forEach((i) => {
+                t.push(<th>{i}</th>)
+            });
+            row.push(<tr>{t}</tr>)
+        });
+        return row
+    }
+    render() {
+        if (this.props.data == undefined) {
+            return []
+        }
+        console.log(this.props.data);
+        return (
+            <table>
+                {this.getHeader()}
+            </table>
+        )
+    }
+}
 
 class GenerateSquare extends React.Component {
     getSquare(i, t, k) {
@@ -79,10 +103,12 @@ export default class Matrix extends React.Component {
         this.state = {
             squareA: {},
             squareB: {},
+            result: [],
             xRow: [],
             xCol: [],
             yRow: [],
             yCol: [],
+            answer: false,
             edit: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -134,7 +160,10 @@ export default class Matrix extends React.Component {
                 squareA: this.state.squareA,
                 squareB: this.state.squareB
             }).then(data => {
-                    console.log(data)
+                    this.setState({
+                        result: data,
+                        answer: true
+                    })
                 }
             )
         }
@@ -168,14 +197,25 @@ export default class Matrix extends React.Component {
         } else {
             return (
                 <div>
-                <GenerateSquare
-                    ARow = {this.state.xRow}
-                    ACol = {this.state.xCol}
-                    BRow = {this.state.yRow}
-                    BCol = {this.state.yCol}
-                    onChange = {(i, j, k) => this.handleInput(i, j, k)}
-                    onClick ={(i) => this.handleSubmit(i)}
-                />
+                    <table>
+                        <tr>
+                            <th>
+                                <GenerateSquare
+                                    ARow={this.state.xRow}
+                                    ACol={this.state.xCol}
+                                    BRow={this.state.yRow}
+                                    BCol={this.state.yCol}
+                                    onChange={(i, j, k) => this.handleInput(i, j, k)}
+                                    onClick={(i) => this.handleSubmit(i)}
+                                />
+                            </th>
+                            <th>
+                                <GenerateAnswer
+                                    data={this.state.result}
+                                />
+                            </th>
+                        </tr>
+                    </table>
                 </div>
             )
         }

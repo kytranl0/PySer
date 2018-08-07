@@ -175,11 +175,11 @@ def calculate():
                 a = len(b)
     m1 += [m]
     m2 += [k]
-    boxes1 = [x for x in m1 if x != []]
-    boxes2 = [x for x in m2 if x != []]
+    boxes1 = [x for x in m1 if x]
+    boxes2 = [x for x in m2 if x]
     u = [[0 for x in range(len(boxes1))] for y in range(len(boxes2[1]))]
     for i in range(0, len(boxes1)):
-        for j in range(0, len(boxes2[0])):
+        for j in range(0, len(boxes2[1])):
             for o in range(0, len(boxes2)):
                 u[i][j] += (boxes1[i][o] * boxes2[o][j])
     return jsonify(u)
