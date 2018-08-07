@@ -1,24 +1,40 @@
 import React from "react";
 var $ = require('jquery');
-import {RandomInt} from "./GCalData";
 
 class GenerateSquare extends React.Component {
-    squareA() {
-        var row = [];
-        var square = [];
-        var count = 0;
-        while (count < this.props.ACol) {
-            row.push(
-                <input key={RandomInt()} type="text" size="3" onChange={this.props.onChange.bind(this, count)}/>
-            );
-            count++
+    getSquare(i, t, k) {
+        if (i === 0) {
+            var row = [];
+            var count = 0;
+            while (count < t) {
+                row.push(
+                    <input type="text" size="3" onChange={this.props.onChange.bind(this, count, k)}/>
+                );
+                count++
+            }
+            return row
+        } else {
+            var row = [];
+            var z = 0;
+            var count = i * 10;
+            while (z < t) {
+                row.push(
+                    <input type="text" size="3" onChange={this.props.onChange.bind(this, count, k)}/>
+                );
+                count++;
+                z++;
+            }
+            return row
         }
+    }
+    squareA() {
+        var square = [];
         let i = 0;
         while (i < this.props.ARow) {
             square.push(
                 <div>
                     <label>
-                        {row}
+                        {this.getSquare(i, this.props.ACol, 'A')}
                     </label>
                 </div>
             );
@@ -27,55 +43,42 @@ class GenerateSquare extends React.Component {
         return square
     }
     squareB() {
-        var row = [];
         var square = [];
         let i = 0;
-        while (i < this.props.BCol) {
-            row.push(
-                <input key={RandomInt()} type="text" size="3" name="B"/>
-            );
-            i++
-        }
-        let g = 0;
-        while (g < this.props.BRow) {
+        while (i < this.props.BRow) {
             square.push(
                 <div>
                     <label>
-                        {row}
+                        {this.getSquare(i, this.props.BCol, 'B')}
                     </label>
                 </div>
             );
-            g++
+            i++
         }
         return square
     }
     render() {
         return (
             <div>
-                <form>
+                <form onSubmit={this.props.onClick.bind(this)}>
                     <h1>A</h1>
                     {this.squareA()}
                     <h1>B</h1>
                     {this.squareB()}
-                    <input type="submit" value="Calculate" onClick={() => this.props.onClick()}/>
+                    <input type="submit" value="Calculate"/>
                 </form>
             </div>
         )
     }
 }
 
+
 export default class Matrix extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            squareA: {
-                rows: {},
-                columns: {},
-            },
-            squareB: {
-                rows: {},
-                columns: {},
-            },
+            squareA: {},
+            squareB: {},
             xRow: [],
             xCol: [],
             yRow: [],
@@ -94,22 +97,57 @@ export default class Matrix extends React.Component {
         })
     }
 
+    setupSquares() {
+        var squareA = {};
+        var squareB = {};
+        var countA = 0;
+        var countB = 0;
+        for (let i=0; i < this.state.xRow; i++) {
+            (i === 0) ? countA = 0 : countA = i * 10;
+            for (let t = 0; t < this.state.xCol; t++) {
+                squareA[countA] = [];
+                countA++
+            }
+        }
+        for (let i=0; i < this.state.yRow; i++) {
+            (i === 0) ? countB = 0 : countB = i * 10;
+            for (let t = 0; t < this.state.yCol; t++) {
+                squareB[countB] = [];
+                countB++
+            }
+        }
+        this.setState({
+            squareA: squareA
+        });
+        this.setState({
+            squareB: squareB
+        });
+    }
+
     handleSubmit(event) {
         event.preventDefault();
         if (!this.state.edit) {
+            this.setupSquares();
             this.setState({edit: true})
         } else {
-            $.get('http://localhost:8080/matrixCal', (data) => {
+            $.post('http://localhost:8080/matrixCal', {
+                squareA: this.state.squareA,
+                squareB: this.state.squareB
+            }).then(data => {
                     console.log(data)
                 }
             )
         }
     }
 
-    handleInput(event, i) {
-        console.log(event.target.value);
-        console.log(i);
+    handleInput(k, j, i) {
+        if (j === "A") {
+                this.state.squareA[k] = i.target.value
+        } else {
+                this.state.squareB[k] = i.target.value
+        }
     }
+
     render() {
         if (!this.state.edit) {
             return (
@@ -130,25 +168,13 @@ export default class Matrix extends React.Component {
         } else {
             return (
                 <div>
-                    <form onSubmit={this.handleSubmit}>
-                        <label>
-                            A :
-                            <input type="text" value={this.state.xRow} name="xRow" size="4" onChange={this.handleChange}/>
-                            <input type="text" value={this.state.xCol} name="xCol" size="4" onChange={this.handleChange}/>
-                        </label>
-                        <label>
-                            B :
-                            <input type="text" value={this.state.yRow} name="yRow" size="4" onChange={this.handleChange}/>
-                            <input type="text" value={this.state.yCol} name="yCol" size="4" onChange={this.handleChange}/>
-                        </label>
-                    </form>
                 <GenerateSquare
                     ARow = {this.state.xRow}
                     ACol = {this.state.xCol}
                     BRow = {this.state.yRow}
                     BCol = {this.state.yCol}
-                    onChange = {(i, j) => this.handleInput(j, i)}
-                    onClick = {() => this.handleClick()}
+                    onChange = {(i, j, k) => this.handleInput(i, j, k)}
+                    onClick ={(i) => this.handleSubmit(i)}
                 />
                 </div>
             )

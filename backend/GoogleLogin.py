@@ -135,18 +135,54 @@ def postdata():
     return jsonify(**o)
 
 
-@app.route('/matrixCal',  methods=['GET'])
+@app.route('/matrixCal',  methods=['POST'])
 def calculate():
-    k = [[1, 2],
-         [4, 2]]
-    t = [[2, 4],
-         [8, 3]]
-    u = [[0 for x in range(len(k[1]))] for y in range(len(t))]
-    for i in range(0, len(k)):
-        for j in range(0, len(t[1])):
-            for o in range(0, len(t)):
-                u[i][j] += (k[i][o] * t[o][j])
-    return '.'
+    data = request.form
+    m1 = []
+    m2 = []
+    m = []
+    k = []
+    n = []
+    b = []
+    for key in data:
+        if key[6:7] == 'A':
+            try:
+                if int(key[9:10]) == 0:
+                    m1 += [n]
+                    n = []
+                    if len(m) == t:
+                        m1 += [m]
+                    m = []
+                    m += [int(data[key])]
+                else:
+                    m += [int(data[key])]
+            except ValueError:
+                n += [int(data[key])]
+                t = len(n)
+        else:
+            try:
+                if int(key[9:10]) == 0:
+                    m2 += [b]
+                    b = []
+                    if len(k) == a:
+                        m2 += [k]
+                    k = []
+                    k += [int(data[key])]
+                else:
+                    k += [int(data[key])]
+            except ValueError:
+                b += [int(data[key])]
+                a = len(b)
+    m1 += [m]
+    m2 += [k]
+    boxes1 = [x for x in m1 if x != []]
+    boxes2 = [x for x in m2 if x != []]
+    u = [[0 for x in range(len(boxes1))] for y in range(len(boxes2[1]))]
+    for i in range(0, len(boxes1)):
+        for j in range(0, len(boxes2[0])):
+            for o in range(0, len(boxes2)):
+                u[i][j] += (boxes1[i][o] * boxes2[o][j])
+    return jsonify(u)
 
 
 def credentials_to_dict(credentials):
