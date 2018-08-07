@@ -181,6 +181,7 @@ export default class Matrix extends React.Component {
         if (!this.state.edit) {
             return (
                 <form onSubmit={this.handleSubmit}>
+                    <h3>Matrix Mutiplication Calculator</h3>
                     <label>
                         A :
                         <input type="text" value={this.state.xRow} name="xRow" size="4" onChange={this.handleChange}/>

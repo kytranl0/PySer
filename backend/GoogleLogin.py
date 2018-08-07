@@ -35,6 +35,8 @@ def index():
 def catch_all(path):
     if path == 'matrix':
         return render_template('index.html')
+    elif path == 'topics':
+        return render_template('index.html')
     else:
         return path
 
