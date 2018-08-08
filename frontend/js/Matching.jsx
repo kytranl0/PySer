@@ -1,55 +1,6 @@
 import React from "react";
 var $ = require('jquery');
 
-class GenerateStudent extends React.Component {
-    hospital() {
-        let arr = [];
-        for (let i = 0; i < parseInt(this.props.hospital); i++) {
-            arr.push(
-                <label>
-                    Hospital {i + 1} Spot:
-                    <input name="HSpot" size="3" onChange={this.props.onChange.bind(this, i)} />
-                </label>
-            )
-        }
-        return arr
-    }
-
-    student() {
-        let arr = [];
-        for (let i = 0; i < parseInt(this.props.student); i++) {
-            arr.push(
-                <label>
-                    Student {i + 1} GPA :
-                <input name="GPA" size="3" onChange={this.props.onChange.bind(this, i)} />
-                    <br />
-                    <label>
-                        Desire Hospital:
-                        <input name="HDesire" size="3" onChange={this.props.onChange.bind(this, i)} />
-                    </label>
-                </label>
-            )
-        }
-        return arr
-    }
-
-    render() {
-        return (
-            <div>
-                <div>
-                    <form>
-                        {this.student()}
-                    </form>
-                </div>
-                <div>
-                    <form>
-                        {this.hospital()}
-                    </form>
-                </div>
-            </div>
-        )
-    }
-}
 
 export default class Matching extends React.Component {
     constructor(props) {
@@ -58,11 +9,15 @@ export default class Matching extends React.Component {
             student: [],
             hospital: [],
             studentInfo: {},
-            hospitalInfo: {},
+            hospitalInfo: {
+                pick: {},
+                opening: {}
+            },
             edit: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.sendData = this.sendData.bind(this);
     }
 
     handleChange(event) {
@@ -71,17 +26,76 @@ export default class Matching extends React.Component {
         });
     }
 
-    handleInput(i, event) {
-        event.preventDefault();
-        console.log(event);
-        console.log(i)
+    handleInput(data, i) {
+        if (i === 'h') {
+            Object.entries(data).forEach(([key, value]) => {
+                this.state.hospitalInfo.pick[key] = value;
+            });
+        } else {
+            Object.entries(data).forEach(([key, value]) => {
+                this.state.studentInfo[key] = value;
+            });
+        }
     }
+
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     if ((Object.keys(nextState.hospitalInfo).length === 0) && (Object.keys(nextState.studentInfo).length === 0)) {
+    //         return true
+    //     } else {
+    //         return false
+    //     }
+    // }
 
     handleClick(event) {
         event.preventDefault();
         this.setState({
             edit: true
         })
+    }
+
+    sendData() {
+        $.post('http://localhost:8080/matching', {
+            student: this.state.studentInfo,
+            hospital: this.state.hospitalInfo
+        }).then(data => {
+            console.log(data)
+        })
+    }
+
+    generateHList() {
+        let arr = [];
+        let prop = {};
+        for (let i = 0; i < parseInt(this.state.hospital); i++) {
+            let list = randomList(parseInt(this.state.student));
+            let open = randomInteger(parseInt(this.state.student), parseInt(this.state.hospital));
+            arr.push(
+                <tr>
+                    <td>Hospital {i}</td>
+                    <td>{list}</td>
+                    <td>{open}</td>
+                </tr>
+            );
+            prop[i] = list
+        }
+        this.handleInput(prop, 'h');
+        return arr
+    };
+
+    generateSList() {
+        let arr = [];
+        let prop = {};
+        for (let i = 0; i < parseInt(this.state.student); i++) {
+            let list = randomList(parseInt(this.state.hospital));
+            arr.push(
+                <tr>
+                    <td>Student {i}</td>
+                    <td>{list}</td>
+                </tr>
+            );
+            prop[i] = list
+        }
+        this.handleInput(prop, 's');
+        return arr
     }
 
     render() {
@@ -97,7 +111,7 @@ export default class Matching extends React.Component {
                     </form>
                     <form>
                         <label>
-                            How many school:
+                            How many hospital:
                             <input size="3" name="hospital" onChange={this.handleChange}></input>
                         </label>
                     </form>
@@ -116,18 +130,46 @@ export default class Matching extends React.Component {
                     </form>
                     <form>
                         <label>
-                            How many school:
+                            How many hospital:
                             <input size="3" onChange={this.handleChange}></input>
                         </label>
                     </form>
-                    <GenerateStudent
-                        student = {this.state.student}
-                        hospital = {this.state.hospital}
-                        onChange = {(event, i) => this.handleInput(event, i)}
-                    />
-                    <input type="submit" value="Submit" />
+                    <table>
+                        <tbody>
+                        <tr>
+                            <th>Student</th>
+                            <th>Rank</th>
+                        </tr>
+                        {this.generateSList()}
+                        </tbody>
+                    </table>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <th>Hospital</th>
+                            <th>Rank</th>
+                            <th>Opening</th>
+                        </tr>
+                        {this.generateHList()}
+                        </tbody>
+                    </table>
+                    <input type="submit" value="Send" id="sendData" onClick={this.sendData}/>
                 </div>
             )
         }
     }
+}
+
+function randomList(i) {
+    let arr = [];
+    for (let x = 0; x < i; x++) {
+        arr.push(x)
+    }
+    return arr.sort(function(a,b) {
+        return 0.5 - Math.random()
+    }).join();
+}
+
+function randomInteger(s, h) {
+    console.log(Math.round((s * 15) / 100))
 }

@@ -187,6 +187,11 @@ def calculate():
     return jsonify(u)
 
 
+@app.route('/matching', methods=['POST'])
+def stablematching():
+    data = request.form
+
+
 def credentials_to_dict(credentials):
     return {'token': credentials.token,
             'refresh_token': credentials.refresh_token,

@@ -8,20 +8,22 @@ var $ = require('jquery');
 const BasicExample = () => (
     <Router>
         <div>
-            <ul>
-                <li>
+            <table>
+                <tbody>
+                <tr>
+                <th>
                     <Link to="/">Calendar</Link>
-                </li>
-                <li>
+                </th>
+                <th>
                     <Link to="/matrix">Matrix</Link>
-                </li>
-                <li>
+                </th>
+                <th>
                     <Link to="/topics">Topics</Link>
-                </li>
-            </ul>
-
+                </th>
+                </tr>
+                </tbody>
+            </table>
             <hr />
-
             <Route exact path="/" component={Login} />
             <Route path="/matrix" component={Matrix}/>
             <Route path="/topics" component={Topics} />
@@ -31,18 +33,22 @@ const BasicExample = () => (
 
 const Topics = ({ match }) => (
     <div>
-        <h2>Topics</h2>
-        <ul>
-            <li>
+        <h3>Topics</h3>
+        <table>
+            <tbody>
+            <tr>
+            <th>
                 <Link to={`${match.url}/matching`}>National Residency Matching Program</Link>
-            </li>
-            <li>
+            </th>
+            <th>
                 <Link to={`${match.url}/components`}>Components</Link>
-            </li>
-            <li>
+            </th>
+            <th>
                 <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
-            </li>
-        </ul>
+            </th>
+            </tr>
+            </tbody>
+        </table>
 
         <Route path={`${match.url}/:topicId`} component={Topic} />
         <Route exact path={match.url} render={() => <h3>Please select a topic.</h3>}/>
@@ -82,7 +88,6 @@ class Login extends React.Component{
     }
     render() {
         return (
-
             <div className="jumbotron jumbotron-fluid">
                 <div className="container">
                     <h1 className="font-weight-bold text-info display-1">Google Calendar</h1>
