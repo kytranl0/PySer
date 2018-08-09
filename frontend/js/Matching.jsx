@@ -31,6 +31,10 @@ export default class Matching extends React.Component {
             Object.entries(data).forEach(([key, value]) => {
                 this.state.hospitalInfo.pick[key] = value;
             });
+        } else if (i === 'p') {
+            Object.entries(data).forEach(([key, value]) => {
+                this.state.hospitalInfo.opening[key] = value;
+            })
         } else {
             Object.entries(data).forEach(([key, value]) => {
                 this.state.studentInfo[key] = value;
@@ -65,6 +69,7 @@ export default class Matching extends React.Component {
     generateHList() {
         let arr = [];
         let prop = {};
+        let pick = {};
         for (let i = 0; i < parseInt(this.state.hospital); i++) {
             let list = randomList(parseInt(this.state.student));
             let open = randomInteger(parseInt(this.state.student), parseInt(this.state.hospital));
@@ -72,11 +77,13 @@ export default class Matching extends React.Component {
                 <tr>
                     <td>Hospital {i}</td>
                     <td>{list}</td>
-                    <td>{open}</td>
+                    <td className="text-center">{open}</td>
                 </tr>
             );
-            prop[i] = list
+            prop[i] = list;
+            pick[i] = open;
         }
+        this.handleInput(pick, 'p');
         this.handleInput(prop, 'h');
         return arr
     };
@@ -171,5 +178,7 @@ function randomList(i) {
 }
 
 function randomInteger(s, h) {
-    console.log(Math.round((s * 15) / 100))
+    let min = 4;
+    let max = Math.floor(s / h);
+    return Math.floor(Math.random() * (max - min)) + min
 }

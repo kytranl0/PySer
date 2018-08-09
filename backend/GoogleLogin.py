@@ -1,5 +1,6 @@
 import os
 import requests
+from collections import defaultdict
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
@@ -190,6 +191,42 @@ def calculate():
 @app.route('/matching', methods=['POST'])
 def stablematching():
     data = request.form
+    count = 0
+    Hkey = 0
+    student = {}
+    w = []
+    h = []
+    hospitalpick = {}
+    for key in data:
+        if key[0:7] == 'student' and key[9:10] == ']':
+            student[int(key[8:9])] = data[key].split(',')
+        elif key[0:7] == 'student' and type(int(key[8:10])) == int:
+            student[int(key[8:10])] = data[key].split(',')
+        elif key[0:13] == 'hospital[pick':
+            hospitalpick[int(key[15:16])] = data[key].split(',')
+        else:
+            w.append(int(key[18:19]))
+            h.append(int(data[key]))
+    hospitalopening = [[0 for x in range(h[y])] for y in range(len(w))]
+    # for Skey in student:
+    #     while str(Skey) in hospitalpick[Hkey]:
+    #         try:
+    #             hospitalopening[Hkey][count] = 'Student ' + str(Skey)
+    #             count += 1
+    #             break
+    #         except IndexError:
+    #             count = 0
+    #             Hkey += 1
+    #             continue
+    r = {}
+    for i in range(0, len(student)):
+        if len(r) != 0:
+            l = min(r, key=r.get)
+            if any(opening == 0 for opening in hospitalopening[l]):
+                hospitalopening[l][hospitalopening[l].index(0)] = 'student' + str(i - 1)
+                r = {}
+        for e in range(0, len(hospitalpick)):
+            r[e] = hospitalpick[e].index(str(i))
 
 
 def credentials_to_dict(credentials):
