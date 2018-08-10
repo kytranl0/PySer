@@ -193,40 +193,53 @@ def stablematching():
     data = request.form
     count = 0
     Hkey = 0
-    student = {}
+    student = defaultdict(list)
     w = []
     h = []
-    hospitalpick = {}
+    hospitalpick = defaultdict(list)
     for key in data:
         if key[0:7] == 'student' and key[9:10] == ']':
-            student[int(key[8:9])] = data[key].split(',')
+            for i in data[key].split(','):
+                student[int(key[8:9])].append(int(i))
         elif key[0:7] == 'student' and type(int(key[8:10])) == int:
-            student[int(key[8:10])] = data[key].split(',')
+            for i in data[key].split(','):
+                student[int(key[8:10])].append(int(i))
         elif key[0:13] == 'hospital[pick':
-            hospitalpick[int(key[15:16])] = data[key].split(',')
+            for s in data[key].split(','):
+                hospitalpick[int(key[15:16])].append(int(s))
         else:
             w.append(int(key[18:19]))
             h.append(int(data[key]))
     hospitalopening = [[0 for x in range(h[y])] for y in range(len(w))]
-    # for Skey in student:
-    #     while str(Skey) in hospitalpick[Hkey]:
-    #         try:
-    #             hospitalopening[Hkey][count] = 'Student ' + str(Skey)
-    #             count += 1
-    #             break
-    #         except IndexError:
-    #             count = 0
-    #             Hkey += 1
-    #             continue
     r = {}
-    for i in range(0, len(student)):
-        if len(r) != 0:
-            l = min(r, key=r.get)
-            if any(opening == 0 for opening in hospitalopening[l]):
-                hospitalopening[l][hospitalopening[l].index(0)] = 'student' + str(i - 1)
-                r = {}
-        for e in range(0, len(hospitalpick)):
-            r[e] = hospitalpick[e].index(str(i))
+    # for i in range(0, len(student)):
+    #     if len(r) != 0:
+    #         l = sorted(r, key=r.get)
+    #         for h in l:
+    #             if any(opening == 0 for opening in hospitalopening[h]):
+    #                 hospitalopening[h][hospitalopening[h].index(0)] = 'student' + str(i - 1)
+    #                 r = {}
+    #                 break
+    #             else:
+    #                 continue
+    #     for e in range(0, len(hospitalpick)):
+    #         r[e] = hospitalpick[e].index(str(i))
+    # return jsonify(hospitalopening)
+    for i in range(0, max(h)):
+        t = defaultdict(list)
+        for key in hospitalpick:
+            t[key].append(hospitalpick[key][i])
+        check = getunique(t)
+
+
+
+
+def getunique(t):
+    result = {}
+    for key, value in t.items():
+        if value not in result.values():
+            result[key] = value
+    return result
 
 
 def credentials_to_dict(credentials):

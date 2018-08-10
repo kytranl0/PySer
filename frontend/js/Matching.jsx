@@ -71,7 +71,7 @@ export default class Matching extends React.Component {
         let prop = {};
         let pick = {};
         for (let i = 0; i < parseInt(this.state.hospital); i++) {
-            let list = randomList(parseInt(this.state.student));
+            let list = fisherYates(parseInt(this.state.student));
             let open = randomInteger(parseInt(this.state.student), parseInt(this.state.hospital));
             arr.push(
                 <tr>
@@ -168,6 +168,7 @@ export default class Matching extends React.Component {
 }
 
 function randomList(i) {
+    console.log(i);
     let arr = [];
     for (let x = 0; x < i; x++) {
         arr.push(x)
@@ -175,6 +176,20 @@ function randomList(i) {
     return arr.sort(function(a,b) {
         return 0.5 - Math.random()
     }).join();
+}
+
+function fisherYates(list) {
+    let arr = [];
+    for (let i = 0; i < (list + 1); i++) {
+        arr.push(i)
+    }
+    for (let x = (arr.length - 1); x > 0; x--) {
+        let index = Math.floor(Math.random() * x);
+        let tmp = arr[index];
+        arr[index] = arr[x];
+        arr[x] = tmp;
+    }
+    return arr.join()
 }
 
 function randomInteger(s, h) {
