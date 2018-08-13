@@ -180,20 +180,21 @@ function randomList(i) {
 
 function fisherYates(list) {
     let arr = [];
-    for (let i = 0; i < (list + 1); i++) {
+    for (let i = 0; i < list; i++) {
         arr.push(i)
     }
-    for (let x = (arr.length - 1); x > 0; x--) {
-        let index = Math.floor(Math.random() * x);
-        let tmp = arr[index];
-        arr[index] = arr[x];
-        arr[x] = tmp;
+    console.log(arr);
+    for (let i = arr.length - 1; i > 0; i--) {
+       let index = Math.floor(Math.random() * i);
+       let obb = arr[i];
+       arr[i] = arr[index];
+       arr[index] = obb;
     }
     return arr.join()
 }
 
 function randomInteger(s, h) {
-    let min = 4;
+    let min = 3;
     let max = Math.floor(s / h);
     return Math.floor(Math.random() * (max - min)) + min
 }

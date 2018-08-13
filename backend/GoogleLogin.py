@@ -191,55 +191,69 @@ def calculate():
 @app.route('/matching', methods=['POST'])
 def stablematching():
     data = request.form
-    count = 0
-    Hkey = 0
-    student = defaultdict(list)
     w = []
     h = []
+    studentrank = defaultdict(list)
     hospitalpick = defaultdict(list)
     for key in data:
         if key[0:7] == 'student' and key[9:10] == ']':
             for i in data[key].split(','):
-                student[int(key[8:9])].append(int(i))
+                studentrank[int(key[8:9])].append(int(i))
         elif key[0:7] == 'student' and type(int(key[8:10])) == int:
             for i in data[key].split(','):
-                student[int(key[8:10])].append(int(i))
+                studentrank[int(key[8:10])].append(int(i))
         elif key[0:13] == 'hospital[pick':
             for s in data[key].split(','):
                 hospitalpick[int(key[15:16])].append(int(s))
         else:
             w.append(int(key[18:19]))
             h.append(int(data[key]))
-    hospitalopening = [[0 for x in range(h[y])] for y in range(len(w))]
-    r = {}
-    # for i in range(0, len(student)):
-    #     if len(r) != 0:
-    #         l = sorted(r, key=r.get)
-    #         for h in l:
-    #             if any(opening == 0 for opening in hospitalopening[h]):
-    #                 hospitalopening[h][hospitalopening[h].index(0)] = 'student' + str(i - 1)
-    #                 r = {}
-    #                 break
-    #             else:
-    #                 continue
-    #     for e in range(0, len(hospitalpick)):
-    #         r[e] = hospitalpick[e].index(str(i))
-    # return jsonify(hospitalopening)
-    for i in range(0, max(h)):
-        t = defaultdict(list)
-        for key in hospitalpick:
-            t[key].append(hospitalpick[key][i])
-        check = getunique(t)
+    hospitalopening = [['' for x in range(h[y])] for y in range(len(w))]
+    students = [x for x in range(len(studentrank))]
+    pickedstudents = []
+    for hospital in range(len(w)):
+        spot = 0
+        while spot < len(hospitalopening[hospital]):
+            Hstudent = students[hospitalpick[hospital][0]]
+            if Hstudent in pickedstudents:
+                for Dhospital, val in enumerate(hospitalopening):
+                    if Hstudent in val:
+                        ranking = {}
+                        for rank, spick in enumerate(studentrank[Hstudent]):
+                            ranking[spick] = rank
+                        if ranking[Dhospital] > ranking[hospital]:
+                            hospitalopening[hospital][spot] = Hstudent
+                            hospitalopening[Dhospital].remove(Hstudent)
+                            nextStudent = hospitalpick[Dhospital][0]
+                            hospitalopening[Dhospital].append(nextStudent)
+                            hospitalpick[Dhospital].remove(nextStudent)
+                            hospitalpick[hospital].remove(Hstudent)
+                            spot += 1
+                            break
+                        else:
+                            hospitalpick[hospital].remove(Hstudent)
+                            spot -= 1
+                            break
+            else:
+                student = students[hospitalpick[hospital][0]]
+                hospitalopening[hospital][spot] = student
+                hospitalpick[hospital].remove(student)
+                pickedstudents.append(student)
+                spot += 1
 
-
+    return jsonify(hospitalopening)
 
 
 def getunique(t):
-    result = {}
+    seen = defaultdict(list)
+    dup = {}
     for key, value in t.items():
-        if value not in result.values():
-            result[key] = value
-    return result
+        if value[0] not in seen:
+            seen[value[0]] = [key]
+        elif value[0] in seen:
+            seen[value[0]].append(key)
+            dup[value[0]] = seen[value[0]]
+    return dup
 
 
 def credentials_to_dict(credentials):
