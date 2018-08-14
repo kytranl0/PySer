@@ -256,10 +256,11 @@ def stablematching():
 @app.route('/pancake', methods=['POST'])
 def pancake():
     data = [int(x) for x in request.form['array'].split(',')]
+    dataLen = len(data)
     sortedData = list(set(data))
     steps = []
     sorted = []
-    while sorted != sortedData:
+    while len(sorted) != dataLen:
         maxNum = max(data)
         if data[0] != maxNum:
             try:

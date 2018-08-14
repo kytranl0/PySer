@@ -72,7 +72,12 @@ export default class Pancake extends React.Component {
 function getArray(n) {
     let array = [];
     for (let i = 1; i <= n; i++) {
-        array.push(i)
+        let rand = Math.ceil(Math.random() * 100);
+        if (!array.includes(rand)) {
+            array.push(rand)
+        } else {
+            i--;
+        }
     }
     for (let x = array.length - 1; x > 0; x--) {
         let index = Math.floor(Math.random() * x);
@@ -80,6 +85,6 @@ function getArray(n) {
         array[index] = array[x];
         array[x] = obb
     }
-    console.log(array)
+    console.log(array);
     return array.join()
 }
