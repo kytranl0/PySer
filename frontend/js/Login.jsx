@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Matrix from "./Matrix"
 import Matching from "./Matching"
+import Pancake from "./Pancake"
 
 var $ = require('jquery');
 
@@ -41,7 +42,7 @@ const Topics = ({ match }) => (
                 <Link to={`${match.url}/matching`}>National Residency Matching Program</Link>
             </th>
             <th>
-                <Link to={`${match.url}/components`}>Components</Link>
+                <Link to={`${match.url}/pancake`}>Pancake Problem</Link>
             </th>
             <th>
                 <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
@@ -59,6 +60,10 @@ const Topic = ({ match }) => {
         if (match.params.topicId === 'matching') {
             return (
                 <Matching />
+            )
+        } else if (match.params.topicId === 'pancake') {
+            return (
+                <Pancake />
             )
         } else {
             return (

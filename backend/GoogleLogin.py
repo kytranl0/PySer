@@ -1,5 +1,6 @@
 import os
 import requests
+import math
 from collections import defaultdict
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
@@ -35,6 +36,8 @@ def index():
 @app.route('/<path:path>')
 def catch_all(path):
     if path == 'matrix':
+        return render_template('index.html')
+    elif path == 'pancake':
         return render_template('index.html')
     elif path == 'topics':
         return render_template('index.html')
@@ -250,6 +253,44 @@ def stablematching():
 
     return jsonify(hospitalopening)
 
+@app.route('/pancake', methods=['POST'])
+def pancake():
+    data = [int(x) for x in request.form['array'].split(',')]
+    sortedData = list(set(data))
+    steps = []
+    sorted = []
+    while sorted != sortedData:
+        maxNum = max(data)
+        if data[0] != maxNum:
+            try:
+                maxNumberIndex = data.index(maxNum)
+                for i in range(math.floor(maxNumberIndex / 2)):
+                    od = data[i]
+                    data[i] = data[maxNumberIndex]
+                    data[maxNumberIndex] = od
+                    maxNumberIndex -= 1
+                steps.append(data[:])
+            finally:
+                maxIndex = len(data) - 1
+                for x in range(math.floor((maxIndex + 1) / 2)):
+                    obb = data[x]
+                    data[x] = data[maxIndex]
+                    data[maxIndex] = obb
+                    maxIndex -= 1
+                steps.append(data[:])
+                data.remove(maxNum)
+                sorted.insert(0, maxNum)
+        else:
+            maxIndex = len(data) - 1
+            for x in range(math.floor((maxIndex + 1) / 2)):
+                obb = data[x]
+                data[x] = data[maxIndex]
+                data[maxIndex] = obb
+                maxIndex -= 1
+            steps.append(data[:])
+            data.remove(maxNum)
+            sorted.insert(0, maxNum)
+    return jsonify(steps)
 
 def credentials_to_dict(credentials):
     return {'token': credentials.token,

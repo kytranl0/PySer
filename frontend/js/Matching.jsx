@@ -86,9 +86,10 @@ export default class Matching extends React.Component {
             student: this.state.studentInfo,
             hospital: this.state.hospitalInfo
         }).then(data => {
-            console.log(data)
+            console.log(data);
             this.setState({
                 result: data,
+                edit: false
                 }
             );
         })
@@ -151,6 +152,11 @@ export default class Matching extends React.Component {
                         </label>
                     </form>
                     <input type="submit" value="Submit" onClick={this.handleClick} />
+                    <table>
+                        <ResultRow
+                            data = {this.state.result}
+                        />
+                    </table>
                 </div>
             )
         } else {
@@ -187,11 +193,6 @@ export default class Matching extends React.Component {
                         </tr>
                         {this.generateHList()}
                         </tbody>
-                    </table>
-                    <table>
-                        <ResultRow
-                            data = {this.state.result}
-                        />
                     </table>
                     <input type="submit" value="Send" id="sendData" onClick={this.sendData}/>
                 </div>
