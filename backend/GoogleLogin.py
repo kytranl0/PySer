@@ -211,6 +211,7 @@ def stablematching():
     hospitalopening = [['' for x in range(h[y])] for y in range(len(w))]
     students = [x for x in range(len(studentrank))]
     pickedstudents = []
+
     for hospital in range(len(w)):
         spot = 0
         while spot < len(hospitalopening[hospital]):
@@ -224,7 +225,14 @@ def stablematching():
                         if ranking[Dhospital] > ranking[hospital]:
                             hospitalopening[hospital][spot] = Hstudent
                             hospitalopening[Dhospital].remove(Hstudent)
-                            nextStudent = hospitalpick[Dhospital][0]
+                            for s in hospitalpick[Dhospital]:
+                                if s in pickedstudents:
+                                    hospitalpick[Dhospital].remove(s)
+                                    continue
+                                else:
+                                    nextStudent = s
+                                    pickedstudents.append(s)
+                                    break
                             hospitalopening[Dhospital].append(nextStudent)
                             hospitalpick[Dhospital].remove(nextStudent)
                             hospitalpick[hospital].remove(Hstudent)
@@ -232,7 +240,6 @@ def stablematching():
                             break
                         else:
                             hospitalpick[hospital].remove(Hstudent)
-                            spot -= 1
                             break
             else:
                 student = students[hospitalpick[hospital][0]]
@@ -242,18 +249,6 @@ def stablematching():
                 spot += 1
 
     return jsonify(hospitalopening)
-
-
-def getunique(t):
-    seen = defaultdict(list)
-    dup = {}
-    for key, value in t.items():
-        if value[0] not in seen:
-            seen[value[0]] = [key]
-        elif value[0] in seen:
-            seen[value[0]].append(key)
-            dup[value[0]] = seen[value[0]]
-    return dup
 
 
 def credentials_to_dict(credentials):

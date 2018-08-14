@@ -1,6 +1,28 @@
 import React from "react";
 var $ = require('jquery');
 
+class ResultRow extends React.Component {
+    renderRow() {
+        let row = [];
+        this.props.data.forEach((e, index) => {
+            let sRow = [];
+            e.map((x) => {
+                sRow.push(
+                    <td>{x}</td>
+                )
+            });
+            row.push(
+                <tr>{sRow}</tr>
+            )
+        });
+        return row
+    }
+    render() {
+        return (
+            this.renderRow()
+        )
+    }
+}
 
 export default class Matching extends React.Component {
     constructor(props) {
@@ -13,6 +35,7 @@ export default class Matching extends React.Component {
                 pick: {},
                 opening: {}
             },
+            result: [],
             edit: false
         };
         this.handleChange = this.handleChange.bind(this);
@@ -57,12 +80,17 @@ export default class Matching extends React.Component {
         })
     }
 
+
     sendData() {
         $.post('http://localhost:8080/matching', {
             student: this.state.studentInfo,
             hospital: this.state.hospitalInfo
         }).then(data => {
             console.log(data)
+            this.setState({
+                result: data,
+                }
+            );
         })
     }
 
@@ -160,6 +188,11 @@ export default class Matching extends React.Component {
                         {this.generateHList()}
                         </tbody>
                     </table>
+                    <table>
+                        <ResultRow
+                            data = {this.state.result}
+                        />
+                    </table>
                     <input type="submit" value="Send" id="sendData" onClick={this.sendData}/>
                 </div>
             )
@@ -168,7 +201,6 @@ export default class Matching extends React.Component {
 }
 
 function randomList(i) {
-    console.log(i);
     let arr = [];
     for (let x = 0; x < i; x++) {
         arr.push(x)
@@ -183,7 +215,6 @@ function fisherYates(list) {
     for (let i = 0; i < list; i++) {
         arr.push(i)
     }
-    console.log(arr);
     for (let i = arr.length - 1; i > 0; i--) {
        let index = Math.floor(Math.random() * i);
        let obb = arr[i];
