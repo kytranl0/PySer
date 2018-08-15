@@ -60,6 +60,7 @@ export default class SortedList extends React.Component {
         if (!this.state.edit) {
         return (
             <div>
+                <h5>Two Sorted Lists A and B of items. Find all distinct items</h5>
                 <form>
                     <label>
                         List #1 :

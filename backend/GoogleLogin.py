@@ -307,6 +307,39 @@ def sortedList():
     return jsonify(newList1 + newList2)
 
 
+@app.route('/sumArr', methods=['POST'])
+def sumArr():
+    pairs = []
+    array = heapSort([int(x) for x in request.form['array'].split(',')])
+    randNum = int(request.form['randNum'])
+    sortedArr = set(array)
+    newArr = [x for x in sortedArr if x <= randNum]
+    for x in newArr:
+        i = randNum - x
+        if i in newArr:
+            pairs.append([x, i])
+        else:
+            continue
+    return jsonify(pairs)
+
+
+
+def heapSort(arr):
+    n = len(arr)
+    for i in range(n, -1, -1):
+        largest = i
+        l = 2 * i + 1
+        r = 2 * i + 2
+        if arr[i] < arr[l]:
+            largest = l
+        if arr[i] < arr[r]:
+            largest = r
+        if largest != i:
+
+
+
+
+
 def credentials_to_dict(credentials):
     return {'token': credentials.token,
             'refresh_token': credentials.refresh_token,
