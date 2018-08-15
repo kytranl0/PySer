@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Matrix from "./Matrix"
 import Matching from "./Matching"
 import Pancake from "./Pancake"
+import SortedList from "./SortedList"
 
 var $ = require('jquery');
 
@@ -19,7 +20,7 @@ const BasicExample = () => (
                     <Link to="/matrix">Matrix</Link>
                 </th>
                 <th>
-                    <Link to="/topics">Topics</Link>
+                    <Link to="/topics">Algorithms</Link>
                 </th>
                 </tr>
                 </tbody>
@@ -45,7 +46,7 @@ const Topics = ({ match }) => (
                 <Link to={`${match.url}/pancake`}>Pancake Problem</Link>
             </th>
             <th>
-                <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
+                <Link to={`${match.url}/sortedList`}>Common items in two sorted lists</Link>
             </th>
             </tr>
             </tbody>
@@ -64,6 +65,10 @@ const Topic = ({ match }) => {
         } else if (match.params.topicId === 'pancake') {
             return (
                 <Pancake />
+            )
+        } else if (match.params.topicId === 'sortedList') {
+            return (
+                <SortedList />
             )
         } else {
             return (

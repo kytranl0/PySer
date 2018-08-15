@@ -26,7 +26,10 @@ export default class Pancake extends React.Component {
             $.post('http://localhost:8080/pancake', {
                 array: this.state.array
             }).then((data) => {
-                console.log(data)
+                let array = data.join();
+                this.setState({
+                    array: array
+                })
             })
         }
     }

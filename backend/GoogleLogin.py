@@ -257,7 +257,6 @@ def stablematching():
 def pancake():
     data = [int(x) for x in request.form['array'].split(',')]
     dataLen = len(data)
-    sortedData = list(set(data))
     steps = []
     sorted = []
     while len(sorted) != dataLen:
@@ -291,7 +290,7 @@ def pancake():
             steps.append(data[:])
             data.remove(maxNum)
             sorted.insert(0, maxNum)
-    return jsonify(steps)
+    return jsonify(sorted)
 
 def credentials_to_dict(credentials):
     return {'token': credentials.token,
