@@ -253,6 +253,7 @@ def stablematching():
 
     return jsonify(hospitalopening)
 
+
 @app.route('/pancake', methods=['POST'])
 def pancake():
     data = [int(x) for x in request.form['array'].split(',')]
@@ -291,6 +292,20 @@ def pancake():
             data.remove(maxNum)
             sorted.insert(0, maxNum)
     return jsonify(sorted)
+
+
+@app.route('/sortedList', methods=['POST'])
+def sortedList():
+    list1 = [int(x) for x in request.form['list1'].split(',')]
+    list2 = [int(x) for x in request.form['list2'].split(',')]
+    newList1 = list1.copy()
+    newList2 = list2.copy()
+    for e in list1:
+        if e in list2:
+            newList1.remove(e)
+            newList2.remove(e)
+    return jsonify(newList1 + newList2)
+
 
 def credentials_to_dict(credentials):
     return {'token': credentials.token,

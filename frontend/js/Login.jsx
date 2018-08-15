@@ -1,9 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Matrix from "./Matrix"
-import Matching from "./Matching"
-import Pancake from "./Pancake"
-import SortedList from "./SortedList"
+import Matching from "./Algorithms/Matching"
+import Pancake from "./Algorithms/Pancake"
+import SortedList from "./Algorithms/SortedList"
+import SumNumbers from "./Algorithms/SumNumbers"
 
 var $ = require('jquery');
 
@@ -33,31 +34,33 @@ const BasicExample = () => (
     </Router>
 );
 
-const Topics = ({ match }) => (
+const Topics = ({match}) => (
     <div>
-        <h3>Topics</h3>
         <table>
             <tbody>
             <tr>
-            <th>
-                <Link to={`${match.url}/matching`}>National Residency Matching Program</Link>
-            </th>
-            <th>
-                <Link to={`${match.url}/pancake`}>Pancake Problem</Link>
-            </th>
-            <th>
-                <Link to={`${match.url}/sortedList`}>Common items in two sorted lists</Link>
-            </th>
+                <th>
+                    <Link to={`${match.url}/matching`}>National Residency Matching Program</Link>
+                </th>
+                <th>
+                    <Link to={`${match.url}/pancake`}>Pancake Problem</Link>
+                </th>
+                <th>
+                    <Link to={`${match.url}/sortedList`}>Common items in two sorted lists</Link>
+                </th>
+                <th>
+                    <Link to={`${match.url}/sum`}>Sum of two numbers</Link>
+                </th>
             </tr>
             </tbody>
         </table>
 
-        <Route path={`${match.url}/:topicId`} component={Topic} />
+        <Route path={`${match.url}/:topicId`} component={Topic}/>
         <Route exact path={match.url} render={() => <h3>Please select a topic.</h3>}/>
     </div>
 );
 
-const Topic = ({ match }) => {
+const Topic = ({match}) => {
         if (match.params.topicId === 'matching') {
             return (
                 <Matching />
@@ -69,6 +72,10 @@ const Topic = ({ match }) => {
         } else if (match.params.topicId === 'sortedList') {
             return (
                 <SortedList />
+            )
+        } else if (match.params.topicId === 'sum') {
+            return (
+                <SumNumbers />
             )
         } else {
             return (
