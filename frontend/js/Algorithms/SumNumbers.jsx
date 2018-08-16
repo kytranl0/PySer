@@ -91,7 +91,7 @@ export default class SortedList extends React.Component {
 function getArray(int) {
     let arr = [];
     for (let i = 0; i < int; i++) {
-        let t = Math.ceil(Math.random() * 50);
+        let t = Math.ceil(Math.random() * 10);
         if (!arr.includes(t)) {
             arr.push(t)
         } else {
@@ -102,7 +102,7 @@ function getArray(int) {
 }
 
 function getRandomNum()  {
-    let min = 25;
-    let max = 39;
+    let min = 9;
+    let max = 13;
     return Math.floor(Math.random() * (max - min)) + min
 }

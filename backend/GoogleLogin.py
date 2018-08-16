@@ -7,6 +7,7 @@ import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import datetime
 import getData
+import heapsort
 from flask_cors import CORS
 from flask import Flask, redirect, session, request, jsonify, url_for, render_template
 
@@ -310,7 +311,7 @@ def sortedList():
 @app.route('/sumArr', methods=['POST'])
 def sumArr():
     pairs = []
-    array = heapSort([int(x) for x in request.form['array'].split(',')])
+    array = heapsort.heapSort([int(x) for x in request.form['array'].split(',')])
     randNum = int(request.form['randNum'])
     sortedArr = set(array)
     newArr = [x for x in sortedArr if x <= randNum]
@@ -321,23 +322,6 @@ def sumArr():
         else:
             continue
     return jsonify(pairs)
-
-
-
-def heapSort(arr):
-    n = len(arr)
-    for i in range(n, -1, -1):
-        largest = i
-        l = 2 * i + 1
-        r = 2 * i + 2
-        if arr[i] < arr[l]:
-            largest = l
-        if arr[i] < arr[r]:
-            largest = r
-        if largest != i:
-
-
-
 
 
 def credentials_to_dict(credentials):
