@@ -311,17 +311,21 @@ def sortedList():
 @app.route('/sumArr', methods=['POST'])
 def sumArr():
     pairs = []
-    array = heapsort.heapSort([int(x) for x in request.form['array'].split(',')])
+    sortedArr = heapsort.heapSort([int(x) for x in request.form['array'].split(',')])
     randNum = int(request.form['randNum'])
-    sortedArr = set(array)
     newArr = [x for x in sortedArr if x <= randNum]
     for x in newArr:
         i = randNum - x
         if i in newArr:
-            pairs.append([x, i])
+            pairs.append([newArr.pop(newArr.index(i)), newArr.pop(newArr.index(x))])
         else:
             continue
     return jsonify(pairs)
+
+@app.route('/heap', methods=['POST'])
+def heap():
+    t = request.form
+    p = 'hi'
 
 
 def credentials_to_dict(credentials):

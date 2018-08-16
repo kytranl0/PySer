@@ -27,7 +27,7 @@ export default class SortedList extends React.Component {
         if (event.target.value === 'Send') {
             this.setState({
                 array: getArray(this.state.number),
-                randNum: getRandomNum(),
+                randNum: getRandomNum(this.state.number),
                 edit: true
             })
         } else if (event.target.value === 'Submit') {
@@ -91,18 +91,13 @@ export default class SortedList extends React.Component {
 function getArray(int) {
     let arr = [];
     for (let i = 0; i < int; i++) {
-        let t = Math.ceil(Math.random() * 10);
-        if (!arr.includes(t)) {
-            arr.push(t)
-        } else {
-            i--
-        }
+        let t = Math.ceil(Math.random() * int);
+        arr.push(t);
     }
     return arr.join()
 }
 
-function getRandomNum()  {
-    let min = 9;
-    let max = 13;
-    return Math.floor(Math.random() * (max - min)) + min
+function getRandomNum(int)  {
+    let min = 25;
+    return Math.floor(Math.random() * (int - min)) + min
 }

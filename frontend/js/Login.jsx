@@ -5,6 +5,7 @@ import Matching from "./Algorithms/Matching"
 import Pancake from "./Algorithms/Pancake"
 import SortedList from "./Algorithms/SortedList"
 import SumNumbers from "./Algorithms/SumNumbers"
+import Heap from "./Algorithms/Heap"
 
 var $ = require('jquery');
 
@@ -46,10 +47,13 @@ const Topics = ({match}) => (
                     <Link to={`${match.url}/pancake`}>Pancake Problem</Link>
                 </th>
                 <th>
-                    <Link to={`${match.url}/sortedList`}>Common items in two sorted lists</Link>
+                    <Link to={`${match.url}/sortedList`}>Common items</Link>
                 </th>
                 <th>
-                    <Link to={`${match.url}/sum`}>Sum of two numbers</Link>
+                    <Link to={`${match.url}/sum`}>Sum in array</Link>
+                </th>
+                <th>
+                    <Link to={`${match.url}/heap`}>Heap Merge</Link>
                 </th>
             </tr>
             </tbody>
@@ -76,6 +80,10 @@ const Topic = ({match}) => {
         } else if (match.params.topicId === 'sum') {
             return (
                 <SumNumbers />
+            )
+        } else if (match.params.topicId === 'heap') {
+            return (
+                <Heap />
             )
         } else {
             return (
