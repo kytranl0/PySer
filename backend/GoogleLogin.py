@@ -311,7 +311,7 @@ def sortedList():
 @app.route('/sumArr', methods=['POST'])
 def sumArr():
     pairs = []
-    sortedArr = heapsort.heapSort([int(x) for x in request.form['array'].split(',')])
+    sortedArr = heapsort.MaxHeapSort([int(x) for x in request.form['array'].split(',')])
     randNum = int(request.form['randNum'])
     newArr = [x for x in sortedArr if x <= randNum]
     for x in newArr:
@@ -324,8 +324,15 @@ def sumArr():
 
 @app.route('/heap', methods=['POST'])
 def heap():
-    t = request.form
-    p = 'hi'
+    array = [[int(x) for x in request.form[i].split(',')] for i in request.form]
+    key = 0
+    totalElement = 0
+    sortedArray = {}
+    for i in array:
+        totalElement += len(i)
+        sortedArray[key] = heapsort.maxHeapSort(i)
+        key += 1
+    result = heapsort.minHeapSort(sortedArray, totalElement)
 
 
 def credentials_to_dict(credentials):

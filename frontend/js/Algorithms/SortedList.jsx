@@ -32,6 +32,7 @@ export default class SortedList extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
         if (event.target.value === 'Send') {
+
             let list1 = generateList(this.state.num1);
             let list2 = generateList(this.state.num2);
             this.setState({

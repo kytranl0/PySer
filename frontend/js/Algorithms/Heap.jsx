@@ -40,13 +40,12 @@ export default class Heap extends React.Component {
                 edit: true
             })
         } else if (event.target.value === 'Submit') {
-            let array = [];
+            let array = {};
             Object.keys(this.state.array).map((e) => {
-                array.push(this.state.array[e])
+                array[e] = String(this.state.array[e])
             });
-            console.log(array)
             $.post('http://localhost:8080/heap', {
-                array: array[0]
+                list: array
             }).then((data) => {
                 console.log(data)
             })
@@ -88,11 +87,11 @@ export default class Heap extends React.Component {
                             How many list? :
                             <input name='list' onChange={this.handleChange}/>
                         </label>
+                        <br />
                         <label>
                             How many elements? :
                             <input name='element' onChange={this.handleChange}/>
                             <input type='submit' value='Submit' onClick={this.handleSubmit} />
-                            <input type='submit' value='Restart' onClick={this.handleSubmit} />
                         </label>
                         <h1>{data}</h1>
                     </form>
