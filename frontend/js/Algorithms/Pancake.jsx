@@ -63,7 +63,7 @@ export default class Pancake extends React.Component {
                             <input onChange={this.handleChange}></input>
                             <input type='submit' value='Submit' onClick={this.handleSubmit}></input>
                         </label>
-                        <h1>{this.state.array}</h1>
+                        <h4>{this.state.array}</h4>
                         <input type='submit' value='Send' onClick={this.handleSubmit}></input>
                     </form>
                 </div>

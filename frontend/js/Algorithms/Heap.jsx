@@ -48,12 +48,13 @@ export default class Heap extends React.Component {
                 list: array
             }).then((data) => {
                 this.setState({
-                    result: data
+                    result: data.join(),
                 })
             })
         } else if (event.target.value === 'Restart') {
             this.setState({
                 edit: false,
+                result: [],
                 array: [],
             })
         }
@@ -94,6 +95,7 @@ export default class Heap extends React.Component {
                             How many elements? :
                             <input name='element' onChange={this.handleChange}/>
                             <input type='submit' value='Submit' onClick={this.handleSubmit} />
+                            <input type='submit' value='Restart' onClick={this.handleSubmit} />
                         </label>
                         <h1>{data}</h1>
                         <h5>{this.state.result}</h5>

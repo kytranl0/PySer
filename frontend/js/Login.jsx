@@ -6,6 +6,7 @@ import Pancake from "./Algorithms/Pancake"
 import SortedList from "./Algorithms/SortedList"
 import SumNumbers from "./Algorithms/SumNumbers"
 import Heap from "./Algorithms/Heap"
+import BFS from "./Algorithms/BFS"
 
 var $ = require('jquery');
 
@@ -55,6 +56,9 @@ const Topics = ({match}) => (
                 <th>
                     <Link to={`${match.url}/heap`}>Heap Merge</Link>
                 </th>
+                <th>
+                    <Link to={`${match.url}/bfs`}>BFS</Link>
+                </th>
             </tr>
             </tbody>
         </table>
@@ -84,6 +88,10 @@ const Topic = ({match}) => {
         } else if (match.params.topicId === 'heap') {
             return (
                 <Heap />
+            )
+        } else if (match.params.topicId === 'bfs') {
+            return (
+                <BFS />
             )
         } else {
             return (

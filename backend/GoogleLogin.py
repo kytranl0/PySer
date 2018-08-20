@@ -311,7 +311,7 @@ def sortedList():
 @app.route('/sumArr', methods=['POST'])
 def sumArr():
     pairs = []
-    sortedArr = heapsort.MaxHeapSort([int(x) for x in request.form['array'].split(',')])
+    sortedArr = heapsort.maxHeapSort([int(x) for x in request.form['array'].split(',')])
     randNum = int(request.form['randNum'])
     newArr = [x for x in sortedArr if x <= randNum]
     for x in newArr:
