@@ -33,31 +33,46 @@ def minHeapSort(arr, int):
     result = []
     min_heap = {}
     while len(result) != int:
-        if len(min_heap) != len(arr):
-            for i in range(0, len(arr)):
-                min_heap[i] = arr[i].pop(0)
-            sorted_heap = min_heap.copy()
-            sorted_heap = minSort(sorted_heap, len(min_heap) - 1)
-
-            result.append(min_heap.pop(0))
+        try:
+            if len(min_heap) != len(arr):
+                for i in range(0, len(arr)):
+                    min_heap[i] = arr[i].pop(0)
+                sorted_heap = minSort(min_heap.copy(), len(min_heap) - 1)
+                smallestIndex = list(min_heap.keys())[list(min_heap.values()).index(sorted_heap.pop(0))]
+                smallest = min_heap.pop(smallestIndex)
+                min_heap[smallestIndex] = arr[smallestIndex].pop(0)
+                result.append(smallest)
+            else:
+                sorted_heap = minSort(min_heap.copy(), len(min_heap) - 1)
+                smallestIndex = list(min_heap.keys())[list(min_heap.values()).index(sorted_heap.pop(list(sorted_heap.keys())[0]))]
+                smallest = min_heap.pop(smallestIndex)
+                result.append(smallest)
+                min_heap[smallestIndex] = arr[smallestIndex].pop(0)
+        except Exception as e:
+            if any(min_heap):
+                arr.pop(smallestIndex)
+            else:
+                sorted_heap = minSort(list(min_heap.values()), len(min_heap) - 1)
+                result += sorted_heap
+    return result
 
 
 def minSort(min_heap, int):
     while int >= 0:
-        smallest = int
-        l = 2 * smallest + 1
-        r = 2 * smallest + 2
         try:
-            if min_heap[smallest] > min_heap[l]:
+            smallest = int
+            l = 2 * smallest + 1
+            r = 2 * smallest + 2
+            if list(min_heap.values())[smallest] > list(min_heap.values())[l]:
                 smallest = l
-            if min_heap[smallest] > min_heap[r]:
+            if list(min_heap.values())[smallest] > list(min_heap.values())[r]:
                 smallest = r
             if smallest != int:
-                min_heap[smallest], min_heap[int] = min_heap[int], min_heap[smallest]
+                min_heap[list(min_heap.keys())[smallest]], min_heap[list(min_heap.keys())[int]] = min_heap[list(min_heap.keys())[int]], min_heap[list(min_heap.keys())[smallest]]
             int -= 1
         except Exception as e:
             if smallest != int:
-                min_heap[smallest], min_heap[int] = min_heap[int], min_heap[smallest]
+                min_heap[list(min_heap.keys())[smallest]], min_heap[list(min_heap.keys())[int]] = min_heap[list(min_heap.keys())[int]], min_heap[list(min_heap.keys())[smallest]]
             int -= 1
             continue
     return min_heap

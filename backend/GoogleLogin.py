@@ -333,7 +333,7 @@ def heap():
         sortedArray[key] = heapsort.maxHeapSort(i)
         key += 1
     result = heapsort.minHeapSort(sortedArray, totalElement)
-
+    return jsonify(result)
 
 def credentials_to_dict(credentials):
     return {'token': credentials.token,

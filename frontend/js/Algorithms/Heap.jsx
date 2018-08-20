@@ -47,7 +47,9 @@ export default class Heap extends React.Component {
             $.post('http://localhost:8080/heap', {
                 list: array
             }).then((data) => {
-                console.log(data)
+                this.setState({
+                    result: data
+                })
             })
         } else if (event.target.value === 'Restart') {
             this.setState({
@@ -94,6 +96,7 @@ export default class Heap extends React.Component {
                             <input type='submit' value='Submit' onClick={this.handleSubmit} />
                         </label>
                         <h1>{data}</h1>
+                        <h5>{this.state.result}</h5>
                     </form>
                 </div>
             )
