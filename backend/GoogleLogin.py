@@ -8,6 +8,7 @@ import googleapiclient.discovery
 import datetime
 import getData
 import heapsort
+import bfs
 from flask_cors import CORS
 from flask import Flask, redirect, session, request, jsonify, url_for, render_template
 
@@ -334,6 +335,20 @@ def heap():
         key += 1
     result = heapsort.minHeapSort(sortedArray, totalElement)
     return jsonify(result)
+
+@app.route('/BFS', methods=['POST'])
+def BFS():
+    data = [int(x) for x in request.form['edges'].split(',')]
+    num = len(data)
+    array = defaultdict(list)
+    i = 0
+    count = 0
+    while i < num:
+        array[count] = [data[i], data[i+1]]
+        count += 1
+        i += 2
+    result = bfs.bfs(array, data)
+
 
 def credentials_to_dict(credentials):
     return {'token': credentials.token,
