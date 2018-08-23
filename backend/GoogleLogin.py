@@ -1,6 +1,7 @@
 import os
 import requests
 import math
+import asyncio
 from collections import defaultdict
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
@@ -23,7 +24,7 @@ SCOPES = ['https://www.googleapis.com/auth/userinfo.email',
 API_SERVICE_NAME = 'calendar'
 API_VERSION = 'v3'
 
-
+loop = asyncio.get_event_loop()
 app = Flask(__name__, static_folder='../frontend/dist', template_folder='../frontend')
 CORS(app)
 
@@ -338,17 +339,20 @@ def heap():
 
 @app.route('/BFS', methods=['POST'])
 def BFS():
+    result = []
     data = [int(x) for x in request.form['edges'].split(',')]
+    arr = [int(x) for x in request.form['arr'].split(',')]
+    arrLength = int(len(arr) / 2) + 1
     num = len(data)
     array = defaultdict(list)
     i = 0
-    count = 0
     while i < num:
-        array[count] = [data[i], data[i+1]]
-        count += 1
+        array[data[i]].append(data[i+1])
         i += 2
-    result = bfs.bfs(array, data)
-
+    uniqueNodes = loop.run_until_complete(bfs.getUnique(arr))
+    for i in uniqueNodes:
+        result.append(loop.run_until_complete(bfs.bfs(array, i, arrLength, uniqueNodes)))
+    t = 'hi'
 
 def credentials_to_dict(credentials):
     return {'token': credentials.token,

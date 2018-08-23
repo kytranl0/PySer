@@ -10,7 +10,7 @@ export default class BFS extends React.Component {
             nodes: [],
             edges: [],
             numbers: [],
-            y: []
+            arr: []
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,10 +24,12 @@ export default class BFS extends React.Component {
             })
         } else {
             event.preventDefault();
-            let edges = this.state.y.join();
+            let edges = this.state.numbers.join();
+            let arr = this.state.arr.join();
             $.post('http://localhost:8080/BFS', {
                 nodes: this.state.nodes,
-                edges: edges
+                edges: edges,
+                arr: arr
             }).then((data) => {
                 console.log(data)
             })
@@ -40,19 +42,18 @@ export default class BFS extends React.Component {
         }
         if (event.target.name === 'nodes') {
             let nodes = getNode(parseInt(event.target.value));
-            let edges, numbers, edge;
-            [edges, numbers, edge] = getEdge(parseInt(event.target.value));
-            console.log(edge);
+            let edges, edge, arr;
+            [edges, edge, arr] = getEdge(parseInt(event.target.value));
             this.setState({
                 nodes: nodes,
                 edges: edges,
-                numbers: numbers,
-                y: edge
+                numbers: edge,
+                arr: arr
             })
         }
     }
     render() {
-        const getNum = this.state.numbers.map((e) =>  <li key={e}>{e.join()}</li>);
+        const getNum = this.state.numbers.map((e) =>  <th key={e}>{e.join()}</th>);
         const graph = {
             nodes: this.state.nodes,
             edges: this.state.edges
@@ -70,10 +71,10 @@ export default class BFS extends React.Component {
         const events = {
             select: function(event) {
                 var { nodes, edges } = event;
-                console.log("Selected nodes:");
-                console.log(nodes);
-                console.log("Selected edges:");
-                console.log(edges);
+                // console.log("Selected nodes:");
+                // console.log(nodes);
+                // console.log("Selected edges:");
+                // console.log(edges);
             }
         };
         if (!this.state.edit) {
@@ -99,7 +100,11 @@ export default class BFS extends React.Component {
                         </label>
                         <br/>
                     </form>
+                    <table>
+                        <tr>
                     {getNum}
+                        </tr>
+                    </table>
                     <Graph graph={graph} options={options} events={events} style={{height: "640px"}}/>
                 </div>
             )
@@ -116,34 +121,31 @@ function getNode(int) {
 }
 
 function getEdge(int) {
-    let arr = [];
-    let numbers = [];
+    let edges = [];
     let edge = [];
+    let arr = [];
     for (let i = 1; i <= int; i++) {
+        let from = i;
         let to = Math.ceil(Math.random() * int);
-        let from  = Math.floor(Math.random() * int);
-        if ((from !== 0) && (to !== from)) {
-            let o = [to, from];
-            edge.push(o);
-            numbers.push(from, to);
-            arr.push({from: from, to: to });
-            arr.push({from: to, to: from});
+        if ((from !== to) && checkArray(edge, [from, to])) {
+            edges.push({from: from, to: to}, {from: to, to: from});
+            edge.push([from, to], [to, from]);
+            arr.push([from, to])
         } else {
             i--
         }
     }
-    for (let i = 1; i <= int; i++) {
-        if (numbers.includes(i)) {
-            continue
-        } else {
-            let rand = Math.ceil(Math.random() * int);
-            edge.push([i, rand]);
-            numbers.push(rand, i);
-            arr.push({from: i, to: rand});
-            arr.push({from: rand, to: i});
+    return [edges, edge, arr]
+}
+
+function checkArray(edge, o) {
+    let t = true;
+    edge.forEach((e) => {
+        if ((e[0] === o[0]) && (e[1] === o[1])) {
+            t = false
         }
-    }
-    return [arr, edge, numbers]
+    });
+    return t
 }
 
 function testFunction() {

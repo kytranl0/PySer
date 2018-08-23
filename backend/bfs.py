@@ -1,16 +1,24 @@
-def bfs(array, data):
-    t = getUnique(data)
+from collections import defaultdict
+
+async def compute(t):
+    global result
+    x = t.pop(0)
+    unique.append(x)
+    if x in t:
+        unique.remove(x)
+        result = list(filter((x).__ne__, t))
+    return len(result)
 
 
-def getUnique(data):
+async def getUnique(data):
+    global result
+    global unique
     unique = []
-    arr = data.copy()
-    dup = []
-    for x in arr:
-        if x in dup:
-            unique.remove(x)
-            arr = list(filter((x).__ne__, arr))
-        else:
-            dup.append(x)
-            unique.append(x)
+    result = data.copy()
+    while await compute(result) != 0:
+        continue
     return unique
+
+async def bfs(array, int, length, uniqueNodes):
+    result = {}
+    return result
