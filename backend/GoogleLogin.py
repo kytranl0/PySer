@@ -340,6 +340,8 @@ def heap():
 @app.route('/BFS', methods=['POST'])
 def BFS():
     result = []
+    distance = []
+    nodes = {}
     data = [int(x) for x in request.form['edges'].split(',')]
     arr = [int(x) for x in request.form['arr'].split(',')]
     arrLength = int(len(arr) / 2) + 1
@@ -350,9 +352,16 @@ def BFS():
         array[data[i]].append(data[i+1])
         i += 2
     uniqueNodes = loop.run_until_complete(bfs.getUnique(arr))
-    for i in uniqueNodes:
-        result.append(loop.run_until_complete(bfs.bfs(array, i, arrLength, uniqueNodes)))
-    t = 'hi'
+    result += loop.run_until_complete(bfs.bfs(array, uniqueNodes[0], arrLength, uniqueNodes))
+    for index, i in enumerate(result):
+        if (len(i) - 2) > ((arrLength - 1) / 2):
+           nodes[index] = result[index]
+    for i in nodes:
+        arr = result[i].copy()
+        del result[i]
+        for node in reversed(nodes[i][1:-1]):
+            t = node
+
 
 def credentials_to_dict(credentials):
     return {'token': credentials.token,

@@ -20,5 +20,30 @@ async def getUnique(data):
     return unique
 
 async def bfs(array, int, length, uniqueNodes):
-    result = {}
+    result = []
+    uniqueNodes.remove(int)
+    visitedNodes = [int]
+    queue = []
+    wait = []
+    nodes = []
+    queue.append(array[int][0])
+    while uniqueNodes:
+        try:
+            S1 = set(array[queue[0]])
+            S2 = set(visitedNodes)
+            dup = S1.intersection(S2)
+            if dup:
+                for i in dup:
+                    array[queue[0]].remove(i)
+            if queue[0] in uniqueNodes:
+                uniqueNodes.remove(queue[0])
+            if queue[0] not in visitedNodes:
+                visitedNodes.append(queue[0])
+                queue[0] = array[queue[0]][0]
+        except Exception as e:
+            array[visitedNodes[-2]].remove(queue[0])
+            result += [visitedNodes]
+            visitedNodes = [int]
+            queue[0] = array[int][0]
+            continue
     return result
