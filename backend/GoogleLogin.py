@@ -44,6 +44,8 @@ def catch_all(path):
         return render_template('index.html')
     elif path == 'topics':
         return render_template('index.html')
+    elif path == 'math':
+        return render_template('index.html')
     else:
         return path
 

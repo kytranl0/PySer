@@ -7,6 +7,7 @@ import SortedList from "./Algorithms/SortedList"
 import SumNumbers from "./Algorithms/SumNumbers"
 import Heap from "./Algorithms/Heap"
 import BFS from "./Algorithms/BFS"
+import Mod from "./Math/Math"
 
 var $ = require('jquery');
 
@@ -25,6 +26,9 @@ const BasicExample = () => (
                 <th>
                     <Link to="/topics">Algorithms</Link>
                 </th>
+                    <th>
+                        <Link to="/math">Math</Link>
+                    </th>
                 </tr>
                 </tbody>
             </table>
@@ -32,9 +36,40 @@ const BasicExample = () => (
             <Route exact path="/" component={Login} />
             <Route path="/matrix" component={Matrix}/>
             <Route path="/topics" component={Topics} />
+            <Route path="/math" component={Math} />
         </div>
     </Router>
 );
+
+const Math = ({match}) => (
+    <div>
+        <table>
+            <tbody>
+            <tr>
+                <th>
+                    <Link to={`${match.url}/math`}>Introduction to number theory</Link>
+                </th>
+            </tr>
+            </tbody>
+        </table>
+        <Route path={`${match.url}/:topicIds`} component={Maths}/>
+        <Route exact path={match.url} render={() => <h3>Please select a topic.</h3>}/>
+    </div>
+);
+
+const Maths = ({match}) => {
+    if (match.params.topicIds === 'math') {
+        return (
+            <Mod />
+        )
+    } else {
+        return (
+            <div>
+                <h3>{match.params.topicIds}</h3>
+            </div>
+        )
+    }
+};
 
 const Topics = ({match}) => (
     <div>
