@@ -154,7 +154,6 @@ export default class Calendar extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log('hi')
         if (!isNaN(this.state.editParam[0])) {
             $.post('http://localhost:8080/sendData', {
                 input: this.state.date + 'T' + this.state.editParam + ':00-04:00',
@@ -205,8 +204,6 @@ export default class Calendar extends React.Component {
         if (!this.state.edit) {
             return (
                 <div className="container">
-                    <button type="button" className="btn btn-outline-primary btn-lg">Google
-                    </button>
                     <table className="table">
                         <thead>
                         <tr>
@@ -233,7 +230,6 @@ export default class Calendar extends React.Component {
         } else {
             return (
                 <div className="container">
-                <button type="button" className="btn btn-outline-primary btn-lg">Google</button>
                     <form onSubmit={this.handleSubmit}>
                         <label>
                             {this.state.type} :

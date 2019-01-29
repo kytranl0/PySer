@@ -379,14 +379,14 @@ def patch_event(data, eventid, operation):
         credentials = google.oauth2.credentials.Credentials(
             **session['credentials'])
 
-        a = client_lib(credentials).events().patch(calendarId='pdpmalware@gmail.com',
+        a = client_lib(credentials).events().patch(calendarId='primary',
                                                    eventId=eventid,
                                                    body={operation: data}).execute()
     else:
         credentials = google.oauth2.credentials.Credentials(
             **session['credentials'])
 
-        a = client_lib(credentials).events().patch(calendarId='pdpmalware@gmail.com',
+        a = client_lib(credentials).events().patch(calendarId='primary',
                                                    eventId=eventid,
                                                    body={operation: {
                                                        "dateTime": data
